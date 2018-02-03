@@ -57,6 +57,17 @@ def deactivate(cart_document):
     cart_document.update(field_updates)
     return True
 
+def complete(cart_document):
+    """
+    Completes the cart referenced by the document
+
+    @param cart_document: The Document object that represents the specified cart
+    @return: a boolean flag representing whether the operation succeeded or not
+    """
+    field_updates = {'state': 'completed', "activated": str(datetime.datetime.now())}
+    cart_document.update(field_updates)
+    return True
+
 def add_item(cart_document, item_id):
     """
     Adds an item to the cart referenced by the document
