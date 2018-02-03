@@ -27,11 +27,11 @@ def init(cart=None):
 
     # if cart is not specified, create a new cart
     if cart is None:
-        return collection.add({"id": str(uuid.uuid4()), "state": "inactive", "activated": None, "items": []})
+        return collection.add({"state": "inactive", "activated": None, "items": []})[1]
     # otherwise, look for the document referencing the cart and return the Document object
     else:
         for document in collection.get():
-            if 'id' in document.to_dict() and document.to_dict()['id'] == cart:
+            if document.id == cart:
                 return document.reference
         return None
     
