@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 
+
 class App(QWidget):
     def __init__(self):
         super().__init__()
@@ -13,8 +14,26 @@ class App(QWidget):
         self.width = 800
         self.height = 480
 
+
+
         self.initUI()
 
+
+    def scanItems(self):
+        self.logo = QLabel("<h1>SCAN ITEM</h1>", self)
+        self.logo.setStyleSheet('QPushButton {background-color: #A3C1DA; color: red; font-size: 48px}')
+        self.logo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.logo.resize(300, 30)
+        self.logo.setAlignment(Qt.AlignCenter)
+        self.logo.move(self.width / 2 - 150, 50)
+
+    def addProduce(self):
+        self.logo = QLabel("<h1>ADD PRODUCE</h1>", self)
+        self.logo.setStyleSheet('QPushButton {background-color: #A3C1DA; color: red; font-size: 48px}')
+        self.logo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.logo.resize(300, 30)
+        self.logo.setAlignment(Qt.AlignCenter)
+        self.logo.move(self.width / 2 - 150, 50)
 
 
     def initUI(self):
@@ -25,15 +44,21 @@ class App(QWidget):
         self.logo = QLabel("<h1>COMPANY LOGO</h1>", self)
         self.logo.setStyleSheet('QPushButton {background-color: #A3C1DA; color: red; font-size: 48px}')
         self.logo.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.logo.resize(300, 50)
+        self.logo.resize(300, 30)
         self.logo.setAlignment(Qt.AlignCenter)
         self.logo.move(self.width / 2 - 150, 50)
+
+        price = 0
+        priceString = "$ " + str(float(price))
+        self.priceTotal = QLabel("<h2>" + priceString + "</h2>", self)
+        self.priceTotal.resize(200, 30)
+        self.priceTotal.move(self.width / 2 - 25, 100)
+
 
         btnWidth = 500
         btnHeight = 70
 
-
-        scanBtn = QPushButton('SCAN ITEMS', self)
+        scanBtn = QPushButton('SCAN ITEM', self)
         scanBtn.setStyleSheet('QPushButton {background-color: #C0C0C0; color: black; font-size: 48px; border-radius: 7px}')
         scanBtn.setToolTip('This is an example button')
         scanBtn.move(self.width / 2 - (btnWidth / 2), 150)
@@ -54,11 +79,16 @@ class App(QWidget):
         viewItems.resize(btnWidth, btnHeight)
         viewItems.clicked.connect(self.on_click)
 
+
         self.show()
+
+    def secondScreen(self):
+        bac
 
     @pyqtSlot()
     def on_click(self):
-        print('PyQt5 button click')
+        print(1)
+
 
 
 
