@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from ../src/client.py import *
 
 from cart_interface import Ui_MainWindow
 from cart_interface_scan import Ui_ScanWindow
@@ -11,6 +12,7 @@ from cart_interface_items import Ui_ItemWindow
 
 def main():
 
+    client.init
 
     app = QApplication(sys.argv)
 
