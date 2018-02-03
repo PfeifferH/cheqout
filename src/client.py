@@ -65,15 +65,41 @@ def add_item(cart_document, item_id):
     @return: a boolean flag representing whether the operation succeeded or not
     """
     snapshot = cart_document.get().to_dict()
-    print(snapshot)
     item_array = snapshot['items']
     item_found = False
+    # if the item already exists in the item list, just add 1 to the quantity
     for item in item_array:
         if item_id == item['id']:
             item_found = True
             item['quantity'] += 1
+    # if the item wasn't in the itme list yet, add a new entry to the item list
     if not item_found:
         item_array.append({'id' : item_id, 'quantity' : 1})
-    print(snapshot)
+    # update the data of the document to match the added item
     cart_document.set(snapshot)
     return True
+
+def remove_item(cart_document, item_id):
+    """
+    Removes an item to the cart referenced by the document
+    @param cart_document: The Document object that represents the specified cart
+    @item_id: the id of the item being removed into the cart
+    @return: a boolean flag representing whether the operation succeeded or not
+    """
+    snapshot = cart_document.get().to_dict()
+    item_array = snapshot['items']
+    # if the item already exists in the item list, just add 1 to the quantity
+    for item in item_array:
+        if item_id == item['id']:
+            # if for some reason there's less than 1 of the item return an error
+            if item['quantity'] <= 0:
+                return False
+            # subtract one item from the quantity
+            item['quantity'] -= 1
+            # if the new quantity is 0, remove the item from the list
+            if item['quantity'] == 0:
+                item_array.remove(item)
+            cart_document.set(snapshot)
+            return True
+    # if the item was not found in the list at all, return an error
+    return False
