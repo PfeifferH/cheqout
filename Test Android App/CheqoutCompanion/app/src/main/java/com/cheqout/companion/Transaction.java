@@ -1,25 +1,46 @@
 package com.cheqout.companion;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Angelo on 2/3/2018.
  */
 
 public class Transaction {
-    String auth_code, cart;
+    String auth_code, cart, user, timestamp;
     int payment_type;
     float subtotal, tax, total;
-    List<Item> items;
+    List<HashMap<String, Object>> items;
 
     public Transaction() {
     }
 
-    public List<Item> getItems() {
+    public List<HashMap<String, Object>> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setItems(List<HashMap<String, Object>> items) {
         this.items = items;
     }
 
@@ -71,44 +92,5 @@ public class Transaction {
         this.total = total;
     }
 
-    public class Item {
-        String id;
-        int quantity;
-        float weight, unit_price;
 
-        public String getId() {
-            return id;
-        }
-
-        public Item() {
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
-
-        public float getWeight() {
-            return weight;
-        }
-
-        public void setWeight(float weight) {
-            this.weight = weight;
-        }
-
-        public float getUnit_price() {
-            return unit_price;
-        }
-
-        public void setUnit_price(float unit_price) {
-            this.unit_price = unit_price;
-        }
-    }
 }
