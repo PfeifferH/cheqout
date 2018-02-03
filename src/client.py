@@ -56,3 +56,24 @@ def deactivate(cart_document):
     field_updates = {'state': 'inactive', "activated": None}
     cart_document.update(field_updates)
     return True
+
+def add_item(cart_document, item_id):
+    """
+    Adds an item to the cart referenced by the document
+    @param cart_document: The Document object that represents the specified cart
+    @item_id: the id of the item being added into the cart
+    @return: a boolean flag representing whether the operation succeeded or not
+    """
+    snapshot = cart_document.get().to_dict()
+    print(snapshot)
+    item_array = snapshot['items']
+    item_found = False
+    for item in item_array:
+        if item_id == item['id']:
+            item_found = True
+            item['quantity'] += 1
+    if not item_found:
+        item_array.append({'id' : item_id, 'quantity' : 1})
+    print(snapshot)
+    cart_document.set(snapshot)
+    return True
