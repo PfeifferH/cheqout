@@ -16,6 +16,13 @@ class Ui_ScanWindow(object):
         self.textBrowser.setGeometry(QtCore.QRect(100, 100, 450, 200))
         self.textBrowser.setAutoFillBackground(False)
         self.textBrowser.setObjectName("textBrowser")
+        self.pushButton_2 = QtWidgets.QPushButton(ScanWindow)
+        self.pushButton_2.setGeometry(QtCore.QRect(120, 330, 400, 80))
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.pushButton_2.setFont(font)
+        self.pushButton_2.setAutoDefault(False)
+        self.pushButton_2.setObjectName("pushButton_2")
 
         self.retranslateUi(ScanWindow)
         QtCore.QMetaObject.connectSlotsByName(ScanWindow)
@@ -28,6 +35,7 @@ class Ui_ScanWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:24pt;\">PLEASE SCAN YOUR ITEM AND PLACE IT IN THE CART</span></p></body></html>"))
+        self.pushButton_2.setText(_translate("ScanWindow", "CONTINUE"))
 
 
 if __name__ == "__main__":

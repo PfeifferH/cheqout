@@ -14,10 +14,6 @@ from cart_interface_items import Ui_ItemWindow
 
 def main():
 
-    #Set up api
-    cart = init("keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json")
-    activate(cart)
-
     #initialize application
     app = QApplication(sys.argv)
     application = ApplicationWindow()
@@ -27,18 +23,25 @@ def main():
 
 class ApplicationWindow(QMainWindow):
     def scanClick(self):
+        add_item(self.cart, "WAFERS")
         self.StackedLayout.setCurrentIndex(1)
-
 
     def produceClick(self):
         self.StackedLayout.setCurrentIndex(2)
-
+        add_item(self.cart, "ONIONS")
 
     def itemsClick(self):
         self.StackedLayout.setCurrentIndex(3)
 
+    def mainClick(self):
+        self.StackedLayout.setCurrentIndex(0)
 
     def __init__(self):
+        # Set up api
+        self.cart = init("keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json", 'ULtXMhOuqcRHPpa2aKy1')
+        activate(self.cart)
+
+
         super(ApplicationWindow, self).__init__()
         self.resize(640, 480)
         self.StackedLayout = QStackedLayout()
@@ -71,6 +74,12 @@ class ApplicationWindow(QMainWindow):
         ui.pushButton.clicked.connect(self.scanClick)
         ui.pushButton_2.clicked.connect(self.produceClick)
         ui.pushButton_3.clicked.connect(self.itemsClick)
+
+        scansUi.pushButton_2.clicked.connect(self.mainClick)
+
+        produceUi.pushButton_2.clicked.connect(self.mainClick)
+
+        itemUi.pushButton_2.clicked.connect(self.mainClick)
 
 
 if __name__ == "__main__":
