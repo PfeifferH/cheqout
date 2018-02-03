@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cheqout.companion.VerifyActivity">
+
+    <LinearLayout
+        android:id="@+id/llTransactions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <com.cheqout.companion.TransactionCard
+            android:id="@+id/tcOne"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+        <com.cheqout.companion.TransactionCard
+            android:id="@+id/tcTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+        <com.cheqout.companion.TransactionCard
+            android:id="@+id/tcThree"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+    </LinearLayout>
+
+</ScrollView>
