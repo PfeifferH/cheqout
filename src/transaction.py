@@ -74,7 +74,7 @@ def store_transaction(carts, transactions, inventory, cart_id, user_id):
                 transaction_data['items'].append({'id': item['id'], 'name': item_data['name'], 'weight': item['quantity'], 'unit_price':item_data['unit_price']})
     transaction_data['total'] = transaction_data['subtotal'] + transaction_data['tax']
     # Add a timestamp
-    transaction_data['timestamp'] = str(datetime.datetime.now())
+    transaction_data['timestamp'] = datetime.datetime.utcnow().strftime('%B %d, %Y, %H:%M:%S UTC').lstrip("0").replace(" 0", " ")
     # TODO: find ways to implement this data
     transaction_data['auth_code'] = 'TEST AUTH CODE'
     transaction_data['payment_type'] = -1
