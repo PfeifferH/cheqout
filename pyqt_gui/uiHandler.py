@@ -1,3 +1,4 @@
+import os
 import sys
 sys.path.append('C:\\Users\\hayde\\Documents\\cheqout\\src')
 from PyQt5.QtWidgets import *
@@ -13,7 +14,7 @@ from cart_interface_items import Ui_ItemWindow
 
 def main():
 
-    cart = init()
+    cart = init("keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json")
 
     app = QApplication(sys.argv)
 
