@@ -15,7 +15,7 @@ def init(key_location="../keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.
     The function returns None if the request couldn't be fulfulled
     """
     cred = credentials.Certificate(
-        "../keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json")
+        key_location)
     firebase_admin.initialize_app(cred)
 
     # App is an app object of sorts
