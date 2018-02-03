@@ -5,4 +5,5 @@ if __name__=="__main__":
     client.activate(cart)
     client.add_item(cart, 'test_item')
     client.remove_item(cart, 'test_item')
+    print(client.get_items(cart))
     client.deactivate(cart)

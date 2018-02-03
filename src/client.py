@@ -103,3 +103,12 @@ def remove_item(cart_document, item_id):
             return True
     # if the item was not found in the list at all, return an error
     return False
+
+def get_items(cart_document):
+    """
+    Returns a list of all the items in the cart referenced by the document
+    @param cart_document: The Document object that represents the specified cart
+    @return: A list of objects that represent the items in the cart
+    """
+    snapshot = cart_document.get().to_dict()
+    return snapshot['items']
