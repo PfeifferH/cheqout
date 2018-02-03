@@ -1,5 +1,5 @@
 # cheqout
-Smarter Shopping Carts, a project for QHacks 2018 by [Angelo Lu](https://github.com/angelolu/), [Zhijian Wang](https://github.com/EvW1998/), [Hayden Pfeiffer](https://github.com/PfeifferH/) and [Ian Wang](https://github.com/ianw3214/).
+A project for QHacks 2018 by [Angelo Lu](https://github.com/angelolu/), [Zhijian Wang](https://github.com/EvW1998/), [Hayden Pfeiffer](https://github.com/PfeifferH/) and [Ian Wang](https://github.com/ianw3214/). Speeding up checkouts at supermarkets by fitting existing carts with tech enabling payments.
 ### Targeted Clients: Established supermarket chains
 Big box supermarkets with established physical locations, large inventories and high traffic, such as Walmart and Loblaw-branded stores.
 ### Problems Identified: Slow checkouts
@@ -19,6 +19,7 @@ The solution, titled “cheqout” involves fitting existing shopping carts with
 A customer would take out a cart upon entry and scan each items’ barcode before placing it in the cart. The touchscreen would display the current total of the cart in real time. Once the customer is ready to pay, they can simply tap “Check Out” on the touchscreen and scan a loyalty card (virtual or physical) with an associated payment method or tap their credit or debit card directly. Alternatively, the customer can proceed to a payment kiosk or traditional checkout if they do not have an account, are paying in cash or want a physical receipt, without having to wait for each item to be scanned again.
 On the way out, there would be an employee with a handheld reader displaying what has been paid in the cart to do a quick visual inspection.
 This solution trusts that most users will not steal products, however, a scale integrated in the tray will continuously monitor the weight of products in the cart and the changes in weight associated with an item’s addition/removal and prompt accordingly. The scale will also be used to weigh produce.
+This solution allows for the sale of weighed and barcoded items while still decreasing checkout line congestion. It is scalable to meet the requirements of each individual store and does not require the hiring of many additional personnel.
 ### Challenges
 *  Time: This project is being built for QHacks, a 36-hour hackathon
 
