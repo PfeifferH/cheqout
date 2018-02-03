@@ -14,13 +14,14 @@ from cart_interface_items import Ui_ItemWindow
 
 def main():
 
+    #Set up api
     cart = init("keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json")
+    activate(cart)
 
+    #initialize application
     app = QApplication(sys.argv)
-
     application = ApplicationWindow()
     application.show()
-    # sys.exit(app.exec_())
     app.exec_()
 
 
