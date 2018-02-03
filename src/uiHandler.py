@@ -43,7 +43,7 @@ class ApplicationWindow(QMainWindow):
 
 
         super(ApplicationWindow, self).__init__()
-        self.resize(640, 480)
+        self.resize(800, 480)
         self.StackedLayout = QStackedLayout()
         # Setup the main window
         MainWindow = QMainWindow()

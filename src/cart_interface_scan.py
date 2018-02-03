@@ -11,13 +11,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ScanWindow(object):
     def setupUi(self, ScanWindow):
         ScanWindow.setObjectName("ScanWindow")
-        ScanWindow.resize(643, 487)
+        ScanWindow.resize(800, 480)
         self.textBrowser = QtWidgets.QTextBrowser(ScanWindow)
-        self.textBrowser.setGeometry(QtCore.QRect(100, 100, 450, 200))
+        self.textBrowser.setGeometry(QtCore.QRect(175, 100, 450, 200))
         self.textBrowser.setAutoFillBackground(False)
         self.textBrowser.setObjectName("textBrowser")
         self.pushButton_2 = QtWidgets.QPushButton(ScanWindow)
-        self.pushButton_2.setGeometry(QtCore.QRect(120, 330, 400, 80))
+        self.pushButton_2.setGeometry(QtCore.QRect(200, 330, 400, 80))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.pushButton_2.setFont(font)

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>800</width>
     <height>480</height>
    </rect>
   </property>
@@ -16,7 +16,7 @@
   <widget class="QTextEdit" name="textEdit">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>320</x>
      <y>160</y>
      <width>160</width>
      <height>60</height>
@@ -33,7 +33,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>200</x>
      <y>40</y>
      <width>400</width>
      <height>100</height>
@@ -51,7 +51,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>200</x>
      <y>240</y>
      <width>400</width>
      <height>80</height>
