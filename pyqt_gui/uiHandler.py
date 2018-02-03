@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append('C:\\Users\\hayde\\Documents\\cheqout\\src')
+sys.path.append('../cheqout/src')
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
