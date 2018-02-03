@@ -5,7 +5,8 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-def init(cart=None):
+
+def init(key_location="../keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json", cart=None):
     """
     Initializes firestore document for a certain cart
     @param cart: The cart to find the firestore document for, creates a new one if it is None
