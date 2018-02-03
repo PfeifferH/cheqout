@@ -27,12 +27,12 @@ def init(cart=None):
 
     # if cart is not specified, create a new cart
     if cart is None:
-        return collection.add({"id": str(uuid.uuid4()), "state": "inactive", "activated time": None, "items": []})
+        return collection.add({"id": str(uuid.uuid4()), "state": "inactive", "activated": None, "items": []})
     # otherwise, look for the document referencing the cart and return the Document object
     else:
         for document in collection.get():
             if 'id' in document.to_dict() and document.to_dict()['id'] == cart:
-                return document
+                return document.reference
         return None
     
     return None
@@ -41,5 +41,18 @@ def activate(cart_document):
     """
     Activates the cart referenced by the document
     @param cart_document: The Document object that represents the specified cart
-    @return: 
+    @return: a boolean flag representing whether the operation succeeded or not
     """
+    field_updates = {'state': 'active', 'activated': str(datetime.datetime.now())}
+    cart_document.update(field_updates)
+    return True
+
+def deactivate(cart_document):
+    """
+    Deactivates the cart referenced by the document
+    @param cart_document: The Document object that represents the specified cart
+    @return: a boolean flag representing whether the operation succeeded or not
+    """
+    field_updates = {'state': 'inactive', "activated": None}
+    cart_document.update(field_updates)
+    return True

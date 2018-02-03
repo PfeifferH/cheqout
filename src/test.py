@@ -1,4 +1,6 @@
 import client
 
 if __name__=="__main__":
-    client.init("94769840-8d2a-440e-af83-816b69b75051")
+    cart = client.init('2f3648db-8d1e-43ea-af2d-b8726fbd6bcf')
+    client.activate(cart)
+    client.deactivate(cart)
