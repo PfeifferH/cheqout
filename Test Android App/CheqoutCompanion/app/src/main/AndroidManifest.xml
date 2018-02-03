@@ -16,8 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoyaltyActivity" />
-        <activity android:name=".VerifyActivity"></activity>
+        <activity android:name=".LoyaltyActivity"
+            android:label="@string/activity_loyalty"
+            />
+        <activity android:name=".VerifyActivity"
+            android:label="@string/activity_verify"></activity>
     </application>
 
 </manifest>

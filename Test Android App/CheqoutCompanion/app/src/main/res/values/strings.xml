@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Cheqout Companion</string>
+    <string name="activity_verify">Verify Cart</string>
+    <string name="activity_loyalty">Cheqout Now</string>
 </resources>

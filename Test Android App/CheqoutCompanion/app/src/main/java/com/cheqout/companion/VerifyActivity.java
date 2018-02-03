@@ -38,6 +38,7 @@ public class VerifyActivity extends AppCompatActivity {
         IntentIntegrator integrator = new IntentIntegrator(VerifyActivity.this);
         integrator.initiateScan();
 
+
         myTrans = new ArrayList<>();
     }
 
@@ -67,9 +68,9 @@ public class VerifyActivity extends AppCompatActivity {
             receipt = receipt + "\n************\n\nSubtotal: $" + trans.getSubtotal() + "\nTax: $" + trans.getTax() + "\nTotal: " + trans.getTotal();
 
             if(trans.getPayment_type() == 0){
-                receipt = receipt + "\nCASH\n\n";
+                receipt = receipt + "\nCASH";
             }else if(trans.getPayment_type() == 1){
-                receipt = receipt + "\n\nCREDIT/DEBIT\nAuth: " + trans.getAuth_code() + "\n\n";
+                receipt = receipt + "\n\nCREDIT/DEBIT\nAuth: " + trans.getAuth_code();
             }
             tc.setText(receipt);
         } else {
@@ -82,33 +83,36 @@ public class VerifyActivity extends AppCompatActivity {
         if (scanResult != null) {
             // handle scan result
             //Toast.makeText(VerifyActivity.this, scanResult.getContents(), Toast.LENGTH_LONG).show();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("transaction")
-                    .whereEqualTo("cart", scanResult.getContents())
-                    .limit(3)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (DocumentSnapshot document : task.getResult()) {
-                                    Log.e(TAG, "DocumentSnapshot data: " + document.getData().toString());
-                                    Transaction trans = document.toObject(Transaction.class);
-                                    myTrans.add(trans);
-                                }
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        updateUI();
+            if(scanResult.getContents() != null) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("transaction")
+                        .whereEqualTo("cart", scanResult.getContents())
+                        .limit(3)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (DocumentSnapshot document : task.getResult()) {
+                                        Log.e(TAG, "DocumentSnapshot data: " + document.getData().toString());
+                                        Transaction trans = document.toObject(Transaction.class);
+                                        myTrans.add(trans);
                                     }
-                                });
-                            } else {
-                                Log.e(TAG, "Error getting documents.", task.getException());
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            updateUI();
+                                        }
+                                    });
+                                } else {
+                                    Log.e(TAG, "Error getting documents.", task.getException());
+                                }
                             }
-                        }
-                    });
+                        });
 
-            // else continue with any other code you need in the method
+            }else{
+                VerifyActivity.this.finish();
+            }
         }else{
             VerifyActivity.this.finish();
         }
