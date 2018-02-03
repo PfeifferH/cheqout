@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cheqout.companion">
 
+    <uses-feature
+        android:name="android.hardware.fingerprint"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,11 +22,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoyaltyActivity"
-            android:label="@string/activity_loyalty"
+        <activity
+            android:name=".LoyaltyActivity"
+            android:label="@string/activity_loyalty" />
+        <activity
+            android:name=".VerifyActivity"
+            android:label="@string/activity_verify" />
+        <activity android:name=".FingerprintActivity"
+            android:label="@string/fingerprint"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:excludeFromRecents="true"
             />
-        <activity android:name=".VerifyActivity"
-            android:label="@string/activity_verify"></activity>
     </application>
 
 </manifest>

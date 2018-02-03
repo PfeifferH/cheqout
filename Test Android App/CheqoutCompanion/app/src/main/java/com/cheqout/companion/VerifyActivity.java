@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +25,8 @@ public class VerifyActivity extends AppCompatActivity {
     List<Transaction> myTrans;
     TransactionCard tcOne, tcTwo, tcThree;
 
+    //TODO: Use a recycler view with cards
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +36,40 @@ public class VerifyActivity extends AppCompatActivity {
         tcTwo = (TransactionCard) findViewById(R.id.tcTwo);
         tcThree = (TransactionCard) findViewById(R.id.tcThree);
 
-        IntentIntegrator integrator = new IntentIntegrator(VerifyActivity.this);
-        integrator.initiateScan();
-
-
         myTrans = new ArrayList<>();
+        Intent intent = getIntent();
+        String userkey = intent.getStringExtra("user"); //if it's a string you stored.
+
+        if (userkey == null || userkey.equals("")) {
+            IntentIntegrator integrator = new IntentIntegrator(VerifyActivity.this);
+            integrator.initiateScan();
+        } else {
+            getSupportActionBar().setTitle("Receipts");
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("transaction")
+                    .whereEqualTo("user", userkey)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    Log.e(TAG, "DocumentSnapshot data: " + document.getData().toString());
+                                    Transaction trans = document.toObject(Transaction.class);
+                                    myTrans.add(trans);
+                                }
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        updateUI();
+                                    }
+                                });
+                            } else {
+                                Log.e(TAG, "Error getting documents.", task.getException());
+                            }
+                        }
+                    });
+        }
     }
 
     public void updateUI() {
@@ -67,9 +97,9 @@ public class VerifyActivity extends AppCompatActivity {
             }
             receipt = receipt + "\n************\n\nSubtotal: $" + trans.getSubtotal() + "\nTax: $" + trans.getTax() + "\nTotal: " + trans.getTotal();
 
-            if(trans.getPayment_type() == 0){
+            if (trans.getPayment_type() == 0) {
                 receipt = receipt + "\nCASH";
-            }else if(trans.getPayment_type() == 1){
+            } else if (trans.getPayment_type() == 1) {
                 receipt = receipt + "\n\nCREDIT/DEBIT\nAuth: " + trans.getAuth_code();
             }
             tc.setText(receipt);
@@ -83,7 +113,7 @@ public class VerifyActivity extends AppCompatActivity {
         if (scanResult != null) {
             // handle scan result
             //Toast.makeText(VerifyActivity.this, scanResult.getContents(), Toast.LENGTH_LONG).show();
-            if(scanResult.getContents() != null) {
+            if (scanResult.getContents() != null) {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection("transaction")
                         .whereEqualTo("cart", scanResult.getContents())
@@ -110,10 +140,10 @@ public class VerifyActivity extends AppCompatActivity {
                             }
                         });
 
-            }else{
+            } else {
                 VerifyActivity.this.finish();
             }
-        }else{
+        } else {
             VerifyActivity.this.finish();
         }
     }

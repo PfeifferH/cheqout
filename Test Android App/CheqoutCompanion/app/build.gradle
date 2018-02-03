@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.cheqout.companion"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -36,5 +36,6 @@ dependencies {
     compile 'com.github.kenglxn.QRGen:android:2.4.0'
 
 }
+
 
 apply plugin: 'com.google.gms.google-services'
