@@ -9,3 +9,8 @@ firebase_admin.initialize_app(cred)
 App = firebase_admin.initialize_app(cred, None, 'Cheqout')
 # Client is a firestore client, the docs is https://googlecloudplatform.github.io/google-cloud-python/latest/firestore/client.html
 Client = firebase_admin.firestore.client()
+
+# the top level collection
+collection = Client.collection('carts')
+# gets the documents in the collection
+document = collection.add({"test":"1234"})
