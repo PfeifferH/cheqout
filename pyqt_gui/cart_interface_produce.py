@@ -13,8 +13,11 @@ class Ui_produceWindow(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(640, 480)
         self.textEdit = QtWidgets.QTextEdit(Dialog)
-        self.textEdit.setGeometry(QtCore.QRect(210, 80, 104, 87))
+        self.textEdit.setGeometry(QtCore.QRect(240, 160, 160, 60))
         self.textEdit.setObjectName("textEdit")
+        self.label = QtWidgets.QLabel(Dialog)
+        self.label.setGeometry(QtCore.QRect(260, 130, 131, 31))
+        self.label.setObjectName("label")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -26,7 +29,8 @@ class Ui_produceWindow(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Shoop da Hoop</p></body></html>"))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.label.setText(_translate("Dialog", "Enter Produce Code:"))
 
 
 if __name__ == "__main__":

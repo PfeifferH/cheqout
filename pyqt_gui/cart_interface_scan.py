@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ScanWindow(object):
     def setupUi(self, ScanWindow):
         ScanWindow.setObjectName("ScanWindow")
-        ScanWindow.resize(640, 487)
+        ScanWindow.resize(643, 487)
         self.textBrowser = QtWidgets.QTextBrowser(ScanWindow)
         self.textBrowser.setGeometry(QtCore.QRect(100, 100, 450, 200))
         self.textBrowser.setAutoFillBackground(False)
