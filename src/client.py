@@ -36,3 +36,10 @@ def init(cart=None):
         return None
     
     return None
+
+def activate(cart_document):
+    """
+    Activates the cart referenced by the document
+    @param cart_document: The Document object that represents the specified cart
+    @return: 
+    """
