@@ -1,6 +1,7 @@
 package com.cheqout.companion;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddPaymentActivity extends AppCompatActivity {
@@ -35,6 +39,22 @@ public class AddPaymentActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         userkey = intent.getStringExtra("user");
+
+        db = FirebaseFirestore.getInstance();
+        if (userkey == null || userkey.equals("")) {
+            finish();
+        } else {
+            db.collection("users").document(userkey).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot user = task.getResult();
+                    if (user.exists()) {
+                        if (user.getString("first") != null && user.getString("last") != null) etName.setText( user.getString("first") + " " + user.getString("last"));
+                        if (user.getString("email") != null) etEmail.setText(user.getString("email"));
+                    }
+                }
+            });
+        }
 
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
