@@ -1,11 +1,18 @@
-import client
+from client import Client
 
 if __name__=="__main__":
-    # client api tests
-    cart = client.init()
-    client.activate(cart)
-    client.add_item(cart, 'test_item')
-    client.remove_item(cart, 'test_item')
-    print(client.get_items(cart))
-    client.complete(cart)
-    client.deactivate(cart)
+    # cart = client.init()
+    cart = Client(cart='ULtXMhOuqcRHPpa2aKy1')
+    # client.activate(cart)
+    cart.activate()
+    # client.add_item(cart, 'test_item')
+    cart.add_item('item id')
+    # client.remove_item(cart, 'test_item')
+    cart.remove_item('item id')
+    # print(client.get_items(cart))
+    print(cart.get_items())
+    # client.complete(cart)
+    cart.complete()
+    # client.deactivate(cart)
+    cart.deactivate()
+
