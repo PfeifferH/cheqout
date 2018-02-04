@@ -117,6 +117,7 @@ class ApplicationWindow(QMainWindow):
             self.paying = False
             # reset the cart after payment
             self.cart.clear()
+            self.update_items()
             # return to the main layout
             self.mainClick()
 
