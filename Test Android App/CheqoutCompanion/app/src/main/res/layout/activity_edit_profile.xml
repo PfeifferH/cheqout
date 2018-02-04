@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Email"
-            android:inputType="textPersonName" />
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/etMobile"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Mobile Phone"
-            android:inputType="textPersonName" />
+            android:inputType="phone" />
 
         <Switch
             android:id="@+id/swSMS"
