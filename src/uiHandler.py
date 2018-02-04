@@ -117,6 +117,7 @@ class ApplicationWindow(QMainWindow):
             self.mainClick()
 
     def update_items(self):
+        self.ui.listWidget.clear()
         priceTotal = 0
         shopping_cart = self.cart.get_items()
         for i in range(len(shopping_cart)):
