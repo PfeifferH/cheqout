@@ -95,6 +95,7 @@ class ApplicationWindow(QMainWindow):
         code = code[1:]
         print(code)
         self.cart.add_item(code)
+        update_items()
 
     def update_items(self):
         priceTotal = 0
