@@ -14,12 +14,40 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>80</y>
+      <width>380</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>24</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>IS THIS YOUR ITEM?</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="textBrowser">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>190</y>
+      <width>300</width>
+      <height>60</height>
+     </rect>
+    </property>
+   </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>340</y>
-      <width>400</width>
+      <x>50</x>
+      <y>290</y>
+      <width>300</width>
       <height>80</height>
      </rect>
     </property>
@@ -29,20 +57,31 @@
      </font>
     </property>
     <property name="text">
-     <string>BACK</string>
+     <string>CONTINUE</string>
     </property>
     <property name="autoDefault">
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>20</y>
-      <width>600</width>
-      <height>300</height>
+      <x>450</x>
+      <y>290</y>
+      <width>300</width>
+      <height>80</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>CONTINUE</string>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
