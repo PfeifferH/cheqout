@@ -27,11 +27,10 @@ GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # ------------------------------------------------------------------------
 
-red_func = lambda: None
-yellow_func = lambda: None
-green_func = lambda: None
-
 class ButtonThread(QThread):
+
+    def __init__(self, inp_window):
+        self.window = inp_window
 
     def run(self):
         pre_red = False
@@ -41,21 +40,21 @@ class ButtonThread(QThread):
         while True:
             if GPIO.input(red) and not pre_red:
                 print("red")
-                red_func()
+                self.window.scanClick()
                 pre_red = True
-            else:
+            elif not GPIO.input(red):
                 pre_red = False
             if GPIO.input(yellow) and not pre_yellow:
                 print("yellow")
-                yellow_func()
+                self.window.produceClick()
                 pre_yellow = True
-            else:
+            elif not GPIO.input(yellow):
                 pre_yellow = False
             if GPIO.input(green) and not pre_green:
                 print("green")
-                green_func()
+                self.window.produceEnterClick()
                 pre_green = True
-            else:
+            elif not GPIO.input(green):
                 pre_green = False
 
 
@@ -64,13 +63,10 @@ def main():
 
     #initialize application
     app = QApplication(sys.argv)
-    thread = ButtonThread()
-    thread.finished.connect(app.exit)
     application = ApplicationWindow()
     application.show()
-    red_func = application.scanClick()
-    yellow_func = application.produceClick()
-    green_func = application.produceEnterClick()
+    thread = ButtonThread(application)
+    thread.finished.connect(app.exit)
     thread.start()
     app.exec_()
 
