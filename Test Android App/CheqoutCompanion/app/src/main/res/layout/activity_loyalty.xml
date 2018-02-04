@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
+
             android:orientation="vertical"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -28,28 +29,39 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="30dp" />
 
-            <ImageView
-                android:id="@+id/ivLoyalty"
-                android:layout_width="175dp"
-                android:layout_height="175dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:background="@color/colorWhite" />
-
-            <TextView
-
+            <LinearLayout
+                android:id="@+id/llPayment"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Scan the code above to pay with your card ending in 8504. Your receipt will be saved below."
-                android:textColor="@color/colorWhite" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/ivLoyalty"
+                    android:layout_width="175dp"
+                    android:layout_height="175dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:background="@color/colorWhite" />
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Scan the code above to pay with your card ending in 8504. Your receipt will be saved below."
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/rlShowHide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent">
+            android:background="@color/colorAccent"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
 
             <TextView
                 android:id="@+id/tvPayment"
@@ -58,7 +70,8 @@
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:gravity="center"
-                android:text="Hide payment barcode"
+                android:textStyle="bold"
+                android:text="Show Payment Barcode"
                 android:textColor="@color/colorWhite" />
 
             <ImageView
@@ -68,11 +81,12 @@
                 android:layout_alignRight="@id/tvPayment"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:src="@drawable/ic_expand_less" />
+                android:src="@drawable/ic_expand_more" />
         </RelativeLayout>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
+            android:id="@+id/cvEditPayment"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -106,8 +120,8 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
             android:id="@+id/cvReceipt"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -141,12 +155,13 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/cvProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground">
 
