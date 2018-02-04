@@ -92,9 +92,24 @@ class ApplicationWindow(QMainWindow):
     green_signal = pyqtSignal()
 
     def found_barcode(self, code):
-        code = code[1:]
-        print(code)
-        self.cart.add_item(code)
+        # If we are not paying then we are just scanning for a normal item
+        if not self.paying:
+            code = code[1:]
+            self.cart.add_item(code)
+        # If we are paying then we assume the barcode is a payment thing
+        else:
+            user = None
+            # So we should handle a transaction here
+            for document in self.cart.users.get():
+                if document.to_dict()['loyalty'] == code:
+                    user = document.reference.id
+            if user is None:
+                print("User wasn't found...")
+                return
+            self.cart.store_transaction(self.cart.cart.id, user)
+            print("Transaction succeeded")
+            self.mainClick()
+            
 
     def red_click(self):
         if layout_index == 0:
@@ -141,6 +156,8 @@ class ApplicationWindow(QMainWindow):
     def payClick(self):
         layout_index = 3
         self.StackedLayout.setCurrentIndex(3)
+        # Then process the cart for a transaction
+        paying = True
 
     def mainClick(self):
         layout_index = 0
@@ -203,9 +220,6 @@ class ApplicationWindow(QMainWindow):
         cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
         ui.listWidget.addItem(cartItem)
 
-
-
-
         atexit.register(self.all_done)
 
         # setup threading signals to work with buttons
@@ -217,6 +231,9 @@ class ApplicationWindow(QMainWindow):
         self.button_thread.start()
         self.barcode_thread = ScanThread(self)
         self.barcode_thread.start()
+
+        # initialize member variables
+        paying = False
 
 if __name__ == "__main__":
     main()
