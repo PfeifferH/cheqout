@@ -112,7 +112,7 @@ class ApplicationWindow(QMainWindow):
             if user is None:
                 print("User wasn't found...")
                 return
-            self.cart.store_transaction(self.cart.cart.id, user)
+            self.cart.store_transaction(user)
             print("Transaction succeeded")
             self.mainClick()
 
