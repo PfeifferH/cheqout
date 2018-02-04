@@ -26,12 +26,10 @@ GPIO.setup(red, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # ------------------------------------------------------------------------
-
-class ButtonThread(QThread):
-
-    def __init__(self, app):
-        super().__init__()
-        self.mainWindow = app
+windowRef = None
+red_func = lambda app: None
+yellow_func = lambda app: None
+green_func = lambda app: Noneclass ButtonThread(QThread):
 
     def run(self):
         pre_red = False
@@ -41,51 +39,44 @@ class ButtonThread(QThread):
         while True:
             if GPIO.input(red) and not pre_red:
                 print("red")
-                self.mainWindow.red_signal.emit()
+                red_func(windowRef)
                 pre_red = True
             elif not GPIO.input(red):
                 pre_red = False
             if GPIO.input(yellow) and not pre_yellow:
                 print("yellow")
-                self.mainWindow.yellow_signal.emit()
+                yellow_func(windowRef)
                 pre_yellow = True
             elif not GPIO.input(yellow):
                 pre_yellow = False
             if GPIO.input(green) and not pre_green:
                 print("green")
-                self.mainWindow.green_signal.emit()
+                green_func(windowRef)
                 pre_green = True
             elif not GPIO.input(green):
                 pre_green = False
+
 
 
 def main():
 
     #initialize application
     app = QApplication(sys.argv)
+    thread = ButtonThread()
+    thread.finished.connect(app.exit)
     application = ApplicationWindow()
     application.show()
+    red_func = application.scanClick
+    yellow_func = application.produceClick
+    green_func = application.produceEnterClick
+    windowRef = application
+    thread.start()
     app.exec_()
 
 
 class ApplicationWindow(QMainWindow):
-
-
-    # triggers for button presses
-    red_signal = pyqtSignal()
-    yellow_signal = pyqtSignal()
-    green_signal = pyqtSignal()
-
-    def red_click(self):
-        self.scanClick()
-
-    def yellow_click(self):
-        self.produceClick()
-
-    def green_click(self):
-        self.produceEnterClick()
-
     def scanClick(self):
+        print('TEST SCAN CLICK')
         # newItem = get_barcode(self)
         # add_item(self.cart, newItem)
         Client.add_item(self.cart, 'Tri-team-members')
@@ -163,13 +154,6 @@ class ApplicationWindow(QMainWindow):
 
 
         atexit.register(self.all_done)
-
-        # setup threading signals to work with buttons
-        self.red_signal.connect(self.red_click)
-        self.yellow_signal.connect(self.yellow_click)
-        self.green_signal.connect(self.green_click)
-        self.thread = ButtonThread(self)
-        self.thread.start()
 
 if __name__ == "__main__":
     main()
