@@ -27,12 +27,11 @@ GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # ------------------------------------------------------------------------
 
-# triggers for button presses
-red_signal = pyqtSignal()
-yellow_signal = pyqtSignal()
-green_signal = pyqtSignal()
-
 class ButtonThread(QThread):
+
+    def __init__(self, app):
+        super().__init__()
+        self.mainWindow = app
 
     def run(self):
         pre_red = False
@@ -42,19 +41,19 @@ class ButtonThread(QThread):
         while True:
             if GPIO.input(red) and not pre_red:
                 print("red")
-                red_signal.emit()
+                self.mainWindow.red_signal.emit()
                 pre_red = True
             elif not GPIO.input(red):
                 pre_red = False
             if GPIO.input(yellow) and not pre_yellow:
                 print("yellow")
-                yellow_signal.emit()
+                self.mainWindow.yellow_signal.emit()
                 pre_yellow = True
             elif not GPIO.input(yellow):
                 pre_yellow = False
             if GPIO.input(green) and not pre_green:
                 print("green")
-                green_signal.emit()
+                self.mainWindow.green_signal.emit()
                 pre_green = True
             elif not GPIO.input(green):
                 pre_green = False
@@ -70,6 +69,13 @@ def main():
 
 
 class ApplicationWindow(QMainWindow):
+
+
+    # triggers for button presses
+    red_signal = pyqtSignal()
+    yellow_signal = pyqtSignal()
+    green_signal = pyqtSignal()
+
     def red_click(self):
         pass
 
@@ -159,9 +165,9 @@ class ApplicationWindow(QMainWindow):
         atexit.register(self.all_done)
 
         # setup threading signals to work with buttons
-        red_signal.connect(self.red_click)
-        yellow_signal.connect(self.yellow_click)
-        green_signal.connect(self.green_click)
+        self.red_signal.connect(self.red_click)
+        self.yellow_signal.connect(self.yellow_click)
+        self.green_signal.connect(self.green_click)
         thread = ButtonThread()
         thread.start()
 
