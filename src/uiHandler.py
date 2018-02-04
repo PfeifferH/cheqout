@@ -151,7 +151,6 @@ class ApplicationWindow(QMainWindow):
             pass
         else:
             pass
-        self.produceClick()
 
     def green_click(self):
         if layout_index == 0:
@@ -162,7 +161,6 @@ class ApplicationWindow(QMainWindow):
             self.mainClick()
         else:
             pass
-        self.produceEnterClick()
 
 
     def produceClick(self):
