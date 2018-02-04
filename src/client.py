@@ -45,14 +45,13 @@ class Client():
         # assume we can always find the transaction collection
         self.transactions = client.collection('transaction')
 
-        collection = client.collection('carts')
         # if cart is not specified, create a new cart
         if cart is None:
-            self.cart = collection.add({"state": "inactive", "activated": None, "items": []})[1]
+            self.cart = self.carts.add({"state": "inactive", "activated": None, "items": []})[1]
             return
         # otherwise, look for the document referencing the cart and return the Document object
         else:
-            for document in collection.get():
+            for document in self.carts.get():
                 if document.id == cart:
                     self.cart = document.reference
                     return
