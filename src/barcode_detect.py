@@ -44,6 +44,10 @@ print ("Press q to exit ...")
 scanner = zbar.ImageScanner()
 #scanner.parse_config('enable')
 
+first = None
+second = None
+third = None
+
 # Capture frames from the camera
 for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
     # as raw NumPy array
@@ -55,31 +59,30 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     width, height = pil.size
     raw = pil.tobytes()
 
-    #camera.capture('image.jpg')
-    #time.sleep(0.5)
-    #image = Image.open('image.jpg')
     codes = scanner.scan(raw, width, height, 'Y800')
-    print(codes)
-    #time.sleep(0.5)
-    # create a reader
-    #image = zbar.Images()
-    #scanner.scan(image)
-    #image = scanner.scan(width, height, 'Y800', raw)
-    # extract results
-    #for symbol in image:
-        # do something useful with results
-        #print ('decoded', symbol.type, 'symbol', '"%s"' % symbol.data)
 
-    # show the frame
+    if len(codes) > 0:
+        if first is None:
+            first = codes
+        elif second is None:
+            second = codes
+        elif third is None:
+            third = codes
+    
     cv2.imshow("#cheqout", output)
 
     # clear stream for next frame
     rawCapture.truncate(0)
 
     # Wait for the magic key
-    keypress = cv2.waitKey(1) & 0xFF
-    if keypress == ord('q'):
-    	break
+    if third is not None:
+        if first == second and second == third:
+            print(third[0])
+            break;
+        else:
+            first = None
+            second = None
+            third = None
 
 # When everything is done, release the capture
 camera.close()
