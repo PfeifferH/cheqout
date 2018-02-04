@@ -4,13 +4,14 @@ sys.path.append('../cheqout/src')
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-#from client import *
+from client import *
 
 from cart_interface import Ui_MainWindow
 from cart_interface_scan import Ui_ScanWindow
 from cart_interface_produce import Ui_produceWindow
 from cart_interface_items import Ui_ItemWindow
 
+import atexit
 
 def main():
 
@@ -23,12 +24,12 @@ def main():
 
 class ApplicationWindow(QMainWindow):
     def scanClick(self):
-        #add_item(self.cart, "WAFERS")
+        add_item(self.cart, "WAFERS")
         self.StackedLayout.setCurrentIndex(1)
 
     def produceClick(self):
         self.StackedLayout.setCurrentIndex(2)
-        #add_item(self.cart, "ONIONS")
+        add_item(self.cart, "ONIONS")
 
     def itemsClick(self):
         self.StackedLayout.setCurrentIndex(3)
@@ -36,10 +37,13 @@ class ApplicationWindow(QMainWindow):
     def mainClick(self):
         self.StackedLayout.setCurrentIndex(0)
 
+    def all_done(self):
+        deactivate(self.cart)
+
     def __init__(self):
         # Set up api
-        #self.cart = init("keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json", 'ULtXMhOuqcRHPpa2aKy1')
-        #activate(self.cart)
+        self.cart = init("keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json", 'ULtXMhOuqcRHPpa2aKy1')
+        activate(self.cart)
 
 
         super(ApplicationWindow, self).__init__()
@@ -81,6 +85,8 @@ class ApplicationWindow(QMainWindow):
 
         itemUi.pushButton_2.clicked.connect(self.mainClick)
 
+
+        atexit.register(self.all_done)
 
 if __name__ == "__main__":
     main()
