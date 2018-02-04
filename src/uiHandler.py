@@ -76,6 +76,8 @@ class ApplicationWindow(QMainWindow):
     yellow_signal = pyqtSignal()
     green_signal = pyqtSignal()
 
+    layout_index = 0
+
     def red_click(self):
         self.scanClick()
 
