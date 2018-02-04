@@ -165,7 +165,7 @@ class ApplicationWindow(QMainWindow):
         layout_index = 3
         self.StackedLayout.setCurrentIndex(3)
         # Then process the cart for a transaction
-        paying = True
+        self.paying = True
 
     def mainClick(self):
         layout_index = 0
