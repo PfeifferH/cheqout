@@ -28,11 +28,21 @@
         <activity
             android:name=".VerifyActivity"
             android:label="@string/activity_verify" />
-        <activity android:name=".FingerprintActivity"
-            android:label="@string/fingerprint"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
+        <activity
+            android:name=".Fingerprint.FingerprintActivity"
             android:excludeFromRecents="true"
-            />
+            android:label="@string/fingerprint"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".PaymentActivity"
+            android:label="@string/activity_cardlist"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddPaymentActivity"
+            android:label="@string/activity_addcard" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:label="@string/activity_editprofile" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.cheqout.companion;
+package com.cheqout.companion.Fingerprint;
 
 /**
  * Created by angel on 2/3/2018.

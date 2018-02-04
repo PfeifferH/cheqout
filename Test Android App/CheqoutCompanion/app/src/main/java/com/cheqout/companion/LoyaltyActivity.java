@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.cheqout.companion.Fingerprint.FingerprintActivity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -85,6 +86,16 @@ public class LoyaltyActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
+            }
+        });
+
+        CardView cvEditPayment = (CardView) findViewById(R.id.cvEditPayment);
+        cvEditPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(LoyaltyActivity.this, PaymentActivity.class);
+                myIntent.putExtra("user", USER); //Optional parameters
+                LoyaltyActivity.this.startActivity(myIntent);
             }
         });
 

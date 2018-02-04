@@ -1,4 +1,4 @@
-package com.cheqout.companion;
+package com.cheqout.companion.Fingerprint;
 
 import android.Manifest;
 import android.app.Activity;
@@ -18,7 +18,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.cheqout.companion.R;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
