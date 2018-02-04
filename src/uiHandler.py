@@ -29,7 +29,6 @@ GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 # ------------------------------------------------------------------------
 
-layout_index = 0
 
 class ButtonThread(QThread):
 
@@ -133,55 +132,55 @@ class ApplicationWindow(QMainWindow):
         self.ui.listWidget.addItem(cartItem)
 
     def red_click(self):
-        if layout_index == 0:
+        if self.layout_index == 0:
             pass
-        elif layout_index == 1:
+        elif self.layout_index == 1:
             pass
-        elif layout_index == 2:
+        elif self.layout_index == 2:
             self.mainClick()
         else:
             pass
 
     def yellow_click(self):
-        if layout_index == 0:
+        if self.layout_index == 0:
             self.payClick()
-        elif layout_index == 1:
+        elif self.layout_index == 1:
             pass
-        elif layout_index == 2:
+        elif self.layout_index == 2:
             pass
         else:
             pass
 
     def green_click(self):
-        if layout_index == 0:
+        if self.layout_index == 0:
             self.produceClick()
-            print(layout_index)
-        elif layout_index == 1:
+            print(self.layout_index)
+        elif self.layout_index == 1:
             self.produceEnterClick()
-            print(layout_index)
-        elif layout_index == 2:
+            print(self.layout_index)
+        elif self.layout_index == 2:
             self.mainClick()
-            print(layout_index)
+            print(self.layout_index)
         else:
             pass
 
 
     def produceClick(self):
-        layout_index = 1
+        self.layout_index = 1
         self.StackedLayout.setCurrentIndex(1)
 
     def produceEnterClick(self):
-        layout_index = 2
+        self.layout_index = 2
         self.StackedLayout.setCurrentIndex(2)
 
     def payClick(self):
-        layout_index = 3
+        self.layout_index = 3
         self.StackedLayout.setCurrentIndex(3)
         # Then process the cart for a transaction
         self.paying = True
 
     def mainClick(self):
-        layout_index = 0
+        self.layout_index = 0
         self.StackedLayout.setCurrentIndex(0)
 
     def all_done(self):
@@ -197,7 +196,7 @@ class ApplicationWindow(QMainWindow):
         self.resize(800, 480)
         self.StackedLayout = QStackedLayout()
         # Setup the main window
-        layout_index = 0
+        self.layout_index = 0
         MainWindow = QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(MainWindow)
