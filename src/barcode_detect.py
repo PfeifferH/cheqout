@@ -7,16 +7,12 @@ import zbar
 from PIL import Image
 
 # Debug mode
-DEBUG = True
+DEBUG = False
 if len(sys.argv) > 1:
 	DEBUG = sys.argv[-1] == 'DEBUG'
 
 # Configuration options
-FULLSCREEN = not DEBUG
-if not DEBUG:
-    RESOLUTION = (800, 480)
-else:
-	RESOLUTION = (480, 270)
+RESOLUTION = (480, 270)
 
 # Initialise Raspberry Pi camera
 camera = PiCamera()
@@ -29,20 +25,16 @@ camera.hflip = True
 rawCapture = PiRGBArray(camera, size=RESOLUTION)
 # allow camera to warm up
 time.sleep(0.1)
-print ("PiCamera ready")
+#print ("PiCamera ready")
 
 # Initialise OpenCV window
-if FULLSCREEN:
-	cv2.namedWindow("#cheqout", cv2.WND_PROP_FULLSCREEN)
-	cv2.setWindowProperty("#cheqout", cv2.WND_PROP_FULLSCREEN, 1)
-else:
-	cv2.namedWindow("#cheqout")
+if DEBUG:
+    cv2.namedWindow("#cheqout")
 
-print ("OpenCV version: %s" % (cv2.__version__))
-print ("Press q to exit ...")
+#print ("OpenCV version: %s" % (cv2.__version__))
+#print ("Press q to exit ...")
 
 scanner = zbar.ImageScanner()
-#scanner.parse_config('enable')
 
 first = None
 second = None
@@ -73,7 +65,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     # clear stream for next frame
     rawCapture.truncate(0)
-    keypress = cv2.waitKey(1) & 0xFF
+
     # Wait for the magic key
     if third is not None:
         if first == second and second == third:
@@ -86,4 +78,5 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
 # When everything is done, release the capture
 camera.close()
-cv2.destroyAllWindows()
+if DEBUG:
+    cv2.destroyAllWindows()
