@@ -14,7 +14,7 @@ def get_barcode(DEBUG=False):
         DEBUG = sys.argv[-1] == 'DEBUG'
 
     # Configuration options
-    RESOLUTION = (480, 270)
+    RESOLUTION = (480, 272)
 
     # Initialise Raspberry Pi camera
     camera = PiCamera()
