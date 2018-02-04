@@ -70,6 +70,7 @@
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:gravity="center"
+                android:textStyle="bold"
                 android:text="Show Payment Barcode"
                 android:textColor="@color/colorWhite" />
 

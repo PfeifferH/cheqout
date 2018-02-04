@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.cheqout.companion.Models.Item;
-import com.cheqout.companion.Models.Transaction;
 import com.cheqout.companion.Models.ReceiptCard;
+import com.cheqout.companion.Models.Transaction;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,6 +28,8 @@ public class VerifyActivity extends AppCompatActivity {
     List<Transaction> myTrans;
     ReceiptCard tcUnpaid, tcOne, tcTwo, tcThree;
     FirebaseFirestore db;
+    String unpaid = "";
+    int numUnpaid, numUnpaidResolved;
     //TODO: Use a recycler view with cards
 
     @Override
@@ -36,6 +38,7 @@ public class VerifyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verify);
 
         db = FirebaseFirestore.getInstance();
+
         tcUnpaid = (ReceiptCard) findViewById(R.id.tcUnpaid);
         tcUnpaid.setType(1);
         tcOne = (ReceiptCard) findViewById(R.id.tcOne);
@@ -51,7 +54,6 @@ public class VerifyActivity extends AppCompatActivity {
             integrator.initiateScan();
         } else {
             getSupportActionBar().setTitle("Receipts");
-            db = FirebaseFirestore.getInstance();
             db.collection("transaction")
                     .whereEqualTo("user", userkey)
                     .get()
@@ -90,21 +92,21 @@ public class VerifyActivity extends AppCompatActivity {
         tc.setVisibility(View.VISIBLE);
         if (trans.getItems() != null) {
             tc.setTitle("$" + String.format("%.02f", trans.getTotal()) + " received for " + trans.getItems().size() + " items");
-            String receipt = trans.getTimestamp() + "\n\n";
+            String receipt = trans.getTimestamp() + "\n\n************\n";
             for (HashMap<String, Object> obj : trans.getItems()) {
                 Item myItem = new Item(obj);
                 if (myItem.getQty() == 0 && myItem.getWeight() > 0) {
-                    receipt = receipt + myItem.getName() + "    $" + String.format("%.02f", myItem.getUnit_price()) + " x " + String.format("%.02f", myItem.getWeight()) + " kg    $" + myItem.getUnit_price() * myItem.getWeight() + "\n";
+                    receipt = receipt + myItem.getName() + "    $" + String.format("%.02f", myItem.getUnit_price()) + " x " + String.format("%.02f", myItem.getWeight()) + " lb    $" + myItem.getUnit_price() * myItem.getWeight() + "\n";
                 } else if (myItem.getQty() > 0 && myItem.getWeight() == 0) {
                     receipt = receipt + myItem.getName() + "    $" + String.format("%.02f", myItem.getUnit_price()) + " x " + myItem.getQty() + "    $" + String.format("%.02f", myItem.getUnit_price() * myItem.getQty()) + "\n";
                 } else {
                     receipt = receipt + myItem.getName() + "    $" + String.format("%.02f", myItem.getUnit_price()) + "*0    $0.00\n";
                 }
             }
-            receipt = receipt + "\n************\n\nSubtotal: $" + String.format("%.02f", trans.getSubtotal()) + "\nTax: $" + String.format("%.02f", trans.getTax()) + "\nTotal: $" + String.format("%.02f", trans.getTotal());
+            receipt = receipt + "************\n\nSubtotal: $" + String.format("%.02f", trans.getSubtotal()) + "\nTax: $" + String.format("%.02f", trans.getTax()) + "\nTotal: $" + String.format("%.02f", trans.getTotal());
 
             if (trans.getPayment_type() == 0) {
-                receipt = receipt + "\nCASH";
+                receipt = receipt + "\n\nCASH";
             } else if (trans.getPayment_type() == 1) {
                 receipt = receipt + "\n\nCREDIT/DEBIT\nAuth: " + trans.getAuth_code();
             }
@@ -114,37 +116,79 @@ public class VerifyActivity extends AppCompatActivity {
         }
     }
 
+    private void addToUnpaid(long type, String name, double quantity) {
+        if (type == 1) {
+            unpaid = unpaid + name + " x " + (int) quantity + "\n";
+        } else if (type == 2) {
+            unpaid = unpaid + name + " x " + quantity + " lb\n";
+        }
+        numUnpaidResolved++;
+
+        checkUnpaidComplete();
+    }
+
+    private void checkUnpaidComplete() {
+        if (numUnpaid == numUnpaidResolved) {
+            tcUnpaid.setText(unpaid);
+            tcUnpaid.setVisibility(View.VISIBLE);
+            tcUnpaid.setTitle(numUnpaid + " Unpaid Items");
+        }
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null) {
             // handle scan result
             //Toast.makeText(VerifyActivity.this, scanResult.getContents(), Toast.LENGTH_LONG).show();
+            Log.e("AHHH", "1");
             if (scanResult.getContents() != null) {
+                Log.e("AHHH", "2");
                 db.collection("carts").document(scanResult.getContents())
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    DocumentSnapshot result = task.getResult();
-                                    if(result.getString("state") != null && result.getString("state").equals("active")) {
-                                        final List<HashMap<String, Object>> items = (List) result.get("items");
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                tcUnpaid.setVisibility(View.VISIBLE);
-                                                tcUnpaid.setTitle(items.size() + " Unpaid Items");
-                                                String unpaid = "";
-                                                for(HashMap<String, Object> item:items){
-                                                    unpaid = unpaid + item.get("id") + "  x"+ item.get("quantity") + "\n";
+                                Log.e("AHHH", "3");
+                                if (task.isSuccessful()) {
+                                    Log.e("AHHH", "4");
+                                    final DocumentSnapshot cart = task.getResult();
+                                    if (cart.getString("state") != null && cart.getString("state").equals("active")) {
+                                        Log.e("AHHH", "5");
+                                        final List<HashMap<String, Object>> items = (List) cart.get("items");
+                                        numUnpaid = items.size();
+                                        numUnpaidResolved = 0;
+                                        unpaid = "";
+                                        for (HashMap<String, Object> item : items) {
+                                            final HashMap<String, Object> myItem = item;
+                                            db.collection("inventory").document(item.get("id").toString()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    final DocumentSnapshot results = task.getResult();
+                                                    if (results.exists()) {
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                addToUnpaid((results.getLong("type")), results.getString("name"), Double.parseDouble(myItem.get("quantity").toString()));
+                                                            }
+                                                        });
+                                                    } else {
+                                                        numUnpaid--;
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                checkUnpaidComplete();
+                                                            }
+                                                        });
+                                                    }
                                                 }
-                                                tcUnpaid.setText(unpaid);
-                                            }
-                                        });
+                                            });
+                                        }
                                     }
+
                                 }
                             }
                         });
+                Log.e("AHHH", "7");
                 db.collection("transaction")
                         .whereEqualTo("cart", scanResult.getContents())
                         .limit(3)
@@ -152,9 +196,9 @@ public class VerifyActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                Log.e("AHHH", "8");
                                 if (task.isSuccessful()) {
                                     for (DocumentSnapshot document : task.getResult()) {
-                                        Log.e(TAG, "DocumentSnapshot data: " + document.getData().toString());
                                         Transaction trans = document.toObject(Transaction.class);
                                         myTrans.add(trans);
                                     }
@@ -169,12 +213,12 @@ public class VerifyActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
-
             } else {
+                Log.e("AHHH", "9");
                 VerifyActivity.this.finish();
             }
         } else {
+            Log.e("AHHH", "10");
             VerifyActivity.this.finish();
         }
     }
