@@ -115,6 +115,9 @@ class ApplicationWindow(QMainWindow):
             self.cart.store_transaction(user)
             print("Transaction succeeded")
             self.mainClick()
+            self.paying = False
+            # reset the cart after payment
+            self.cart.clear()
 
     def update_items(self):
         self.ui.listWidget.clear()

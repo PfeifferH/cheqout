@@ -138,6 +138,16 @@ class Client():
         # if the item was not found in the list at all, return an error
         return False
 
+    def clear(self):
+        """
+        Clears the contents of the items in the cart
+        @return: a boolean flag representing whether the operation succeeded or not
+        """
+        field_updates = {
+            "items" : []
+        }
+        self.cart.update(field_updates)
+
     def get_items(self):
         """
         Returns a list of all the items in the cart referenced by the document
