@@ -77,13 +77,13 @@ class ApplicationWindow(QMainWindow):
     green_signal = pyqtSignal()
 
     def red_click(self):
-        pass
+        self.scanClick()
 
     def yellow_click(self):
-        pass
+        self.produceClick()
 
     def green_click(self):
-        pass
+        self.produceEnterClick()
 
     def scanClick(self):
         # newItem = get_barcode(self)
