@@ -206,11 +206,11 @@ class Client():
             else:
                 item_data = self.get_item_data(item['id'])
                 transaction_data['subtotal'] += float(
-                    item_data['unit_price']) * item['quantity']
+                    item_data['price']) * item['quantity']
                 # Add tax if the item is taxable
                 if float(item_data['tax']) == 1:
                     transaction_data['tax'] += float(
-                        item_data['unit_price']) * item['quantity'] * 0.13
+                        item_data['price']) * item['quantity'] * 0.13
                 # process the item as a countable item
                 if item_data['format'] == "0":
                     transaction_data['items'].append(
