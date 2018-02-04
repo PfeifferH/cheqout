@@ -121,7 +121,9 @@ class ApplicationWindow(QMainWindow):
         for i in range(len(self.cart.get_items())):
             priceTotal += self.cart.get_items()[i]['price']
             cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
+            print('a')
             self.ui.listWidget.addItem(cartItem)
+            print('b')
         cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
         self.ui.listWidget.addItem(cartItem)
 
