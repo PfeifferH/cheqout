@@ -26,6 +26,8 @@ class Ui_produceWindow(object):
         font = QtGui.QFont()
         font.setPointSize(16)
         self.pushButton_2.setFont(font)
+        self.pushButton_2.setStyleSheet("background-color: green;\n"
+"")
         self.pushButton_2.setAutoDefault(False)
         self.pushButton_2.setObjectName("pushButton_2")
 

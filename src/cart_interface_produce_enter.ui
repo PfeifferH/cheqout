@@ -56,6 +56,9 @@
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: green;</string>
+    </property>
     <property name="text">
      <string>YES</string>
     </property>
@@ -76,6 +79,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: red;</string>
     </property>
     <property name="text">
      <string>NO</string>
