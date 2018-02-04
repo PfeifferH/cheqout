@@ -22,6 +22,7 @@ This solution trusts that most users will not steal products, however, a scale i
 This solution allows for the sale of weighed and barcoded items while still decreasing checkout line congestion. It is scalable to meet the requirements of each individual store and does not require the hiring of many additional personnel.
 ### Challenges
 *  Time: This project is being built for QHacks, a 36-hour hackathon
+*  Technical: The scale and touch screen remain uncooperative, prompting temporary fixes for the purpose of demonstration
 
 ### Possible Future Features/Value-Added Features
 *  Information about traffic within the store
