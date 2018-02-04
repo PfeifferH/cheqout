@@ -95,7 +95,7 @@ class ApplicationWindow(QMainWindow):
         code = code[1:]
         print(code)
         self.cart.add_item(code)
-        update_items()
+        self.update_items()
 
     def update_items(self):
         priceTotal = 0
@@ -206,7 +206,7 @@ class ApplicationWindow(QMainWindow):
         produceEnterUi.pushButton_3.clicked.connect(self.mainClick)
 
 
-        update_items()
+        self.update_items()
 
 
 
