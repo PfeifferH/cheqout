@@ -118,9 +118,10 @@ class ApplicationWindow(QMainWindow):
 
     def update_items(self):
         priceTotal = 0
-        for i in range(len(self.cart.get_items())):
-            priceTotal += self.cart.get_items()[i]['price']
-            cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
+        shopping_cart = self.cart.get_items()
+        for i in range(len(shopping_cart)):
+            priceTotal += shopping_cart[i]['price']
+            cartItem = QListWidgetItem(shopping_cart[i]['name'] + " " + str(shopping_cart[i]['price']))
             print('a')
             self.ui.listWidget.addItem(cartItem)
             print('b')
