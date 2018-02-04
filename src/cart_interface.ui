@@ -17,9 +17,9 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>50</x>
       <y>125</y>
-      <width>400</width>
+      <width>300</width>
       <height>80</height>
      </rect>
     </property>
@@ -38,9 +38,9 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>50</x>
       <y>225</y>
-      <width>400</width>
+      <width>300</width>
       <height>80</height>
      </rect>
     </property>
@@ -50,15 +50,15 @@
      </font>
     </property>
     <property name="text">
-     <string>ADD PRODUCE</string>
+     <string>PRODUCE</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>50</x>
       <y>325</y>
-      <width>400</width>
+      <width>300</width>
       <height>80</height>
      </rect>
     </property>
@@ -68,7 +68,7 @@
      </font>
     </property>
     <property name="text">
-     <string>VIEW CART</string>
+     <string>PAY</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -92,33 +92,14 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="textBrowser">
+   <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>90</y>
-      <width>120</width>
-      <height>30</height>
+      <x>450</x>
+      <y>125</y>
+      <width>300</width>
+      <height>275</height>
      </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="html">
-     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;$&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
   </widget>
