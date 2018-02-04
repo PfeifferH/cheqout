@@ -41,13 +41,13 @@ class Client():
         collection = client.collection('carts')
         # if cart is not specified, create a new cart
         if cart is None:
-            self.carts = collection.add({"state": "inactive", "activated": None, "items": []})[1]
+            self.cart = collection.add({"state": "inactive", "activated": None, "items": []})[1]
             return
         # otherwise, look for the document referencing the cart and return the Document object
         else:
             for document in collection.get():
                 if document.id == cart:
-                    self.carts = document.reference
+                    self.cart = document.reference
                     return
 
         # The code should never run to this point because the cart should have been found
@@ -60,7 +60,7 @@ class Client():
         @return: a boolean flag representing whether the operation succeeded or not
         """
         field_updates = {'state': 'active', 'activated': str(datetime.datetime.now())}
-        self.carts.update(field_updates)
+        self.cart.update(field_updates)
         return True
 
     def deactivate(self):
@@ -69,7 +69,7 @@ class Client():
         @return: a boolean flag representing whether the operation succeeded or not
         """
         field_updates = {'state': 'inactive', "activated": None}
-        self.carts.update(field_updates)
+        self.cart.update(field_updates)
         return True
 
     def complete(self):
@@ -79,7 +79,7 @@ class Client():
         @return: a boolean flag representing whether the operation succeeded or not
         """
         field_updates = {'state': 'completed', "activated": str(datetime.datetime.now())}
-        self.carts.update(field_updates)
+        self.cart.update(field_updates)
         return True
 
     def add_item(self, item_id):
@@ -88,7 +88,7 @@ class Client():
         @item_id: the id of the item being added into the cart
         @return: a boolean flag representing whether the operation succeeded or not
         """
-        snapshot = self.carts.get().to_dict()
+        snapshot = self.cart.get().to_dict()
         item_array = snapshot['items']
         item_found = False
         # if the item already exists in the item list, just add 1 to the quantity
@@ -100,7 +100,7 @@ class Client():
         if not item_found:
             item_array.append({'id' : item_id, 'quantity' : 1})
         # update the data of the document to match the added item
-        self.carts.set(snapshot)
+        self.cart.set(snapshot)
         return True
 
     def remove_item(self, item_id):
@@ -109,7 +109,7 @@ class Client():
         @item_id: the id of the item being removed into the cart
         @return: a boolean flag representing whether the operation succeeded or not
         """
-        snapshot = self.carts.get().to_dict()
+        snapshot = self.cart.get().to_dict()
         item_array = snapshot['items']
         # if the item already exists in the item list, just add 1 to the quantity
         for item in item_array:
@@ -122,7 +122,7 @@ class Client():
                 # if the new quantity is 0, remove the item from the list
                 if item['quantity'] == 0:
                     item_array.remove(item)
-                self.carts.set(snapshot)
+                self.cart.set(snapshot)
                 return True
         # if the item was not found in the list at all, return an error
         return False
@@ -133,5 +133,16 @@ class Client():
         @param cart_document: The Document object that represents the specified cart
         @return: A list of objects that represent the items in the cart
         """
-        snapshot = self.carts.get().to_dict()
-        return snapshot['items']
+        item_list = []
+        item_snapshot = self.cart.get().to_dict()['items']
+        for item in item_snapshot:
+            for document in self.inventory.get():
+                if document.id == item['id']:
+                    inv_item_dict = document.to_dict()
+                    item_data = {'id': item['id'], 'qty': item['quantity']}
+                    item_data['name'] = inv_item_dict['name']
+                    item_data['price'] = inv_item_dict['price']
+                    item_data['tax'] = inv_item_dict['tax']
+                    item_data['type'] = inv_item_dict['type']
+                    item_list.append(item_data)
+        return item_list

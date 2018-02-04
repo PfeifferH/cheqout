@@ -2,7 +2,7 @@ from client import Client
 
 if __name__=="__main__":
     # cart = client.init()
-    cart = Client()
+    cart = Client(cart='ULtXMhOuqcRHPpa2aKy1')
     # client.activate(cart)
     cart.activate()
     # client.add_item(cart, 'test_item')
