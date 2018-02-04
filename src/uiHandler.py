@@ -93,6 +93,7 @@ class ApplicationWindow(QMainWindow):
 
     def found_barcode(self, code):
         print(code)
+        self.cart.add_item(code)
 
     def red_click(self):
         if layout_index == 0:
