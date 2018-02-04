@@ -29,28 +29,62 @@ GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 class ButtonThread(QThread):
 
+    def __init__(self, app):
+        super().__init__()
+        self.mainWindow = app
+
     def run(self):
+        pre_red = False
+        pre_yellow = False
+        pre_green = False
+
         while True:
-            if (GPIO.input(red)):
+            if GPIO.input(red) and not pre_red:
                 print("red")
-            elif (GPIO.input(yellow)):
+                self.mainWindow.red_signal.emit()
+                pre_red = True
+            elif not GPIO.input(red):
+                pre_red = False
+            if GPIO.input(yellow) and not pre_yellow:
                 print("yellow")
-            elif (GPIO.input(green)):
+                self.mainWindow.yellow_signal.emit()
+                pre_yellow = True
+            elif not GPIO.input(yellow):
+                pre_yellow = False
+            if GPIO.input(green) and not pre_green:
                 print("green")
+                self.mainWindow.green_signal.emit()
+                pre_green = True
+            elif not GPIO.input(green):
+                pre_green = False
+
 
 def main():
 
     #initialize application
     app = QApplication(sys.argv)
-    thread = ButtonThread()
-    thread.finished.connect(app.exit)
-    thread.start()
     application = ApplicationWindow()
     application.show()
     app.exec_()
 
 
 class ApplicationWindow(QMainWindow):
+
+
+    # triggers for button presses
+    red_signal = pyqtSignal()
+    yellow_signal = pyqtSignal()
+    green_signal = pyqtSignal()
+
+    def red_click(self):
+        pass
+
+    def yellow_click(self):
+        pass
+
+    def green_click(self):
+        pass
+
     def scanClick(self):
         # newItem = get_barcode(self)
         # add_item(self.cart, newItem)
@@ -129,6 +163,13 @@ class ApplicationWindow(QMainWindow):
 
 
         atexit.register(self.all_done)
+
+        # setup threading signals to work with buttons
+        self.red_signal.connect(self.red_click)
+        self.yellow_signal.connect(self.yellow_click)
+        self.green_signal.connect(self.green_click)
+        thread = ButtonThread()
+        thread.start()
 
 if __name__ == "__main__":
     main()
