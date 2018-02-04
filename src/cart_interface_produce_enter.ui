@@ -57,7 +57,7 @@
      </font>
     </property>
     <property name="text">
-     <string>CONTINUE</string>
+     <string>YES</string>
     </property>
     <property name="autoDefault">
      <bool>false</bool>
@@ -78,7 +78,7 @@
      </font>
     </property>
     <property name="text">
-     <string>CONTINUE</string>
+     <string>NO</string>
     </property>
     <property name="autoDefault">
      <bool>false</bool>

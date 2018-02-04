@@ -84,8 +84,9 @@ public class LoyaltyActivity extends AppCompatActivity {
         cvProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                Intent myIntent = new Intent(LoyaltyActivity.this, EditProfileActivity.class);
+                myIntent.putExtra("user", USER); //Optional parameters
+                LoyaltyActivity.this.startActivity(myIntent);
             }
         });
 
