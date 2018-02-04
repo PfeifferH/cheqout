@@ -70,9 +70,8 @@ class ScanThread(QThread):
 
     def run(self):
         while True:
-            print('FLAG1')
             code = barcode_detect.get_barcode(False)
-            print('FLAG2')
+            self.mainWindow.barcode_signal.emit(code.decode("utf-8"))
 
 def main():
 
@@ -87,7 +86,7 @@ class ApplicationWindow(QMainWindow):
 
 
     # triggers for button presses
-    barcode_signal = pyqtSignal(int)
+    barcode_signal = pyqtSignal(str)
     red_signal = pyqtSignal()
     yellow_signal = pyqtSignal()
     green_signal = pyqtSignal()
