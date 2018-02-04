@@ -220,13 +220,8 @@ class ApplicationWindow(QMainWindow):
         produceEnterUi.pushButton_3.clicked.connect(self.mainClick)
 
 
-<<<<<<< HEAD
-=======
         self.update_items()
 
-
-
->>>>>>> 1ecc05640b60c23970925a66182b77be2582f8cb
         atexit.register(self.all_done)
 
         # setup threading signals to work with buttons
