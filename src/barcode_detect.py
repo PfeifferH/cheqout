@@ -42,44 +42,44 @@ def get_barcode(display=True):
     second = None
     third = None
 
-    # Capture frames from the camera
-    for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-        # as raw NumPy array
-        output = frame.array.copy()
+    # # Capture frames from the camera
+    # for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+    #     # as raw NumPy array
+    #     output = frame.array.copy()
 
-        # raw detection code
-        gray = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY, dstCn=0)
-        pil = Image.fromarray(gray)
-        width, height = pil.size
-        raw = pil.tobytes()
+    #     # raw detection code
+    #     gray = cv2.cvtColor(output, cv2.COLOR_BGR2GRAY, dstCn=0)
+    #     pil = Image.fromarray(gray)
+    #     width, height = pil.size
+    #     raw = pil.tobytes()
 
-        codes = scanner.scan(raw, width, height, 'Y800')
+    #     codes = scanner.scan(raw, width, height, 'Y800')
 
-        if len(codes) > 0:
-            if first is None:
-                first = codes
-            elif second is None:
-                second = codes
-            elif third is None:
-                third = codes
+    #     if len(codes) > 0:
+    #         if first is None:
+    #             first = codes
+    #         elif second is None:
+    #             second = codes
+    #         elif third is None:
+    #             third = codes
         
-        cv2.imshow("#cheqout", output)
+    #     cv2.imshow("#cheqout", output)
 
-        # clear stream for next frame
-        rawCapture.truncate(0)
+    #     # clear stream for next frame
+    #     rawCapture.truncate(0)
 
-        # Wait for the magic key
-        if display:
-            keypress = cv2.waitKey(1) & 0xFF
+    #     # Wait for the magic key
+    #     if display:
+    #         keypress = cv2.waitKey(1) & 0xFF
 
-        if third is not None:
-            if first == second and second == third:
-                (third[0])
-                break;
-            else:
-                first = None
-                second = None
-                third = None
+    #     if third is not None:
+    #         if first == second and second == third:
+    #             (third[0])
+    #             break;
+    #         else:
+    #             first = None
+    #             second = None
+    #             third = None
 
     # When everything is done, release the capture
     camera.close()
