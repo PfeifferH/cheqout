@@ -134,17 +134,17 @@ class ApplicationWindow(QMainWindow):
 
     def red_click(self):
         if layout_index == 0:
-            self.produceClick()
+            pass
         elif layout_index == 1:
             pass
         elif layout_index == 2:
-            pass
+            self.mainClick()
         else:
             pass
 
     def yellow_click(self):
         if layout_index == 0:
-            pass
+            self.payClick()
         elif layout_index == 1:
             pass
         elif layout_index == 2:
@@ -155,11 +155,11 @@ class ApplicationWindow(QMainWindow):
 
     def green_click(self):
         if layout_index == 0:
-            pass
+            self.produceClick()
         elif layout_index == 1:
-            pass
+            self.produceEnterClick()
         elif layout_index == 2:
-            pass
+            self.mainClick()
         else:
             pass
         self.produceEnterClick()
