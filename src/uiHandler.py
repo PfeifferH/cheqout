@@ -68,7 +68,7 @@ class ScanThread(QThread):
     def run(self):
         while True:
             code = get_barcode()
-            self.mainWindow.barcode_signal.emit(code)
+            self.mainWindow.barcode_signal.emit()
 
 def main():
 
@@ -88,9 +88,8 @@ class ApplicationWindow(QMainWindow):
     yellow_signal = pyqtSignal()
     green_signal = pyqtSignal()
 
-
-    def found_barcode(self, code):
-        print(code)
+    def found_barcode(self):
+        print("code")
 
     def red_click(self):
         self.scanClick()
