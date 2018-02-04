@@ -192,7 +192,8 @@ class Client():
         for document in self.carts.get():
             if document.id == cart_id:
                 cart_data = document.to_dict()
-                item_array = cart_data['items']
+                if 'items' in cart_data:
+                    item_array = cart_data['items']
         if item_array is None:
             return False
         # Then start populating data for the transaction
