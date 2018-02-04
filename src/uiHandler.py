@@ -94,12 +94,36 @@ class ApplicationWindow(QMainWindow):
         print("code")
 
     def red_click(self):
+        if layout_index == 0:
+            pass
+        elif layout_index == 1:
+            pass
+        elif layout_index == 2:
+            pass
+        else:
+            pass
         self.scanClick()
 
     def yellow_click(self):
+        if layout_index == 0:
+            pass
+        elif layout_index == 1:
+            pass
+        elif layout_index == 2:
+            pass
+        else:
+            pass
         self.produceClick()
 
     def green_click(self):
+        if layout_index == 0:
+            pass
+        elif layout_index == 1:
+            pass
+        elif layout_index == 2:
+            pass
+        else:
+            pass
         self.produceEnterClick()
 
     def scanClick(self):
