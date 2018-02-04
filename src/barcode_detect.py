@@ -73,7 +73,7 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
 
     # clear stream for next frame
     rawCapture.truncate(0)
-    keypress = cv2.waitkey(1) & 0xFF
+    keypress = cv2.waitKey(1) & 0xFF
     # Wait for the magic key
     if third is not None:
         if first == second and second == third:
