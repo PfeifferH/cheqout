@@ -177,7 +177,7 @@ class Client():
         return None
 
 
-    def store_transaction(self, user_id):
+    def store_transaction(self, user_id, payment_type=1, auth_code='TEST AUTH CODE'):
         """
         Processes and records a transaction from a carts' items
         @param user_id: The id of the user that is making the transaction
@@ -221,6 +221,6 @@ class Client():
         transaction_data['timestamp'] = datetime.datetime.utcnow().strftime(
             '%B %d, %Y, %H:%M:%S UTC').lstrip("0").replace(" 0", " ")
         # TODO: find ways to implement this data
-        transaction_data['auth_code'] = 'TEST AUTH CODE'
-        transaction_data['payment_type'] = -1
+        transaction_data['auth_code'] = auth_code
+        transaction_data['payment_type'] = payment_type
         self.transactions.add(transaction_data)
