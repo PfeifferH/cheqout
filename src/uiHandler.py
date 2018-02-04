@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from client import *
+#from barcode_detect import *
 
 from cart_interface import Ui_MainWindow
 from cart_interface_scan import Ui_ScanWindow
@@ -24,15 +25,18 @@ def main():
 
 class ApplicationWindow(QMainWindow):
     def scanClick(self):
-        add_item(self.cart, "WAFERS")
+        # newItem = get_barcode(self)
+        # add_item(self.cart, newItem)
+        add_item(self.cart, 'Tri-team-members')
         self.StackedLayout.setCurrentIndex(1)
 
     def produceClick(self):
         self.StackedLayout.setCurrentIndex(2)
-        add_item(self.cart, "ONIONS")
 
     def itemsClick(self):
         self.StackedLayout.setCurrentIndex(3)
+        print(get_items(self.cart))
+
 
     def mainClick(self):
         self.StackedLayout.setCurrentIndex(0)
@@ -84,7 +88,9 @@ class ApplicationWindow(QMainWindow):
         produceUi.pushButton_2.clicked.connect(self.mainClick)
 
         itemUi.pushButton_2.clicked.connect(self.mainClick)
-
+        for i in range(len(get_items(self.cart))):
+            cartItem = QListWidgetItem(get_items(self.cart)[i]['id'])
+            itemUi.listWidget.addItem(cartItem)
 
         atexit.register(self.all_done)
 
