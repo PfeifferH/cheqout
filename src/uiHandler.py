@@ -86,7 +86,7 @@ class ApplicationWindow(QMainWindow):
 
 
     # triggers for button presses
-    barcode_signal = pyqtSignal(int)
+    barcode_signal = pyqtSignal(str)
     red_signal = pyqtSignal()
     yellow_signal = pyqtSignal()
     green_signal = pyqtSignal()
