@@ -30,6 +30,7 @@ GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 class ButtonThread(QThread):
 
     def __init__(self, inp_window):
+        super().__init__()
         self.window = inp_window
 
     def run(self):
