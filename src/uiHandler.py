@@ -116,9 +116,9 @@ class ApplicationWindow(QMainWindow):
         for i in range(len(self.cart.get_items())):
             priceTotal += self.cart.get_items()[i]['price']
             cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
-            ui.listWidget.addItem(cartItem)
+            self.ui.listWidget.addItem(cartItem)
         cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
-        ui.listWidget.addItem(cartItem)
+        self.ui.listWidget.addItem(cartItem)
 
     def red_click(self):
         if layout_index == 0:
@@ -186,8 +186,8 @@ class ApplicationWindow(QMainWindow):
         # Setup the main window
         layout_index = 0
         MainWindow = QMainWindow()
-        ui = Ui_MainWindow()
-        ui.setupUi(MainWindow)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(MainWindow)
         self.StackedLayout.addWidget(MainWindow)
 
 
@@ -211,8 +211,8 @@ class ApplicationWindow(QMainWindow):
         self.setCentralWidget(self.MainWidget)
         self.StackedLayout.setCurrentIndex(0)
 
-        ui.pushButton_2.clicked.connect(self.produceClick)
-        ui.pushButton_3.clicked.connect(self.payClick)
+        self.ui.pushButton_2.clicked.connect(self.produceClick)
+        self.ui.pushButton_3.clicked.connect(self.payClick)
 
         produceUi.pushButton_2.clicked.connect(self.produceEnterClick)
 
@@ -235,7 +235,7 @@ class ApplicationWindow(QMainWindow):
         self.barcode_thread.start()
 
         # initialize member variables
-        paying = False
+        self.paying = False
 
 if __name__ == "__main__":
     main()
