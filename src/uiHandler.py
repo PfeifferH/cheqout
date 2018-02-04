@@ -92,7 +92,7 @@ class ApplicationWindow(QMainWindow):
     green_signal = pyqtSignal()
 
     def found_barcode(self, code):
-        # print(code)
+        print(code)
         self.cart.add_item(code)
 
     def red_click(self):
