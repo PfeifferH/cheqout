@@ -28,6 +28,8 @@ GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # ------------------------------------------------------------------------
 
+layout_index = 0
+
 class ButtonThread(QThread):
 
     def __init__(self, app):
@@ -104,16 +106,19 @@ class ApplicationWindow(QMainWindow):
         # newItem = get_barcode(self)
         # add_item(self.cart, newItem)
         Client.add_item(self.cart, 'Tri-team-members')
+        layout_index = 1
         self.StackedLayout.setCurrentIndex(1)
 
     def produceClick(self):
+        layout_index = 2
         self.StackedLayout.setCurrentIndex(2)
 
     def produceEnterClick(self):
+        layout_index = 3
         self.StackedLayout.setCurrentIndex(3)
 
-
     def mainClick(self):
+        layout_index = 0
         self.StackedLayout.setCurrentIndex(0)
 
     def all_done(self):
@@ -129,6 +134,7 @@ class ApplicationWindow(QMainWindow):
         self.resize(800, 480)
         self.StackedLayout = QStackedLayout()
         # Setup the main window
+        layout_index = 0
         MainWindow = QMainWindow()
         ui = Ui_MainWindow()
         ui.setupUi(MainWindow)
