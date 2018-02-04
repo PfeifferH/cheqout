@@ -24,9 +24,9 @@ red = 23
 yellow = 24
 green = 25
 
-GPIO.setup(red, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(red, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 # ------------------------------------------------------------------------
 
 layout_index = 0
@@ -72,6 +72,7 @@ class ScanThread(QThread):
         while True:
             code = barcode_detect.get_barcode(False)
             self.mainWindow.barcode_signal.emit(code.decode("utf-8"))
+            time.sleep(1)
 
 def main():
 
@@ -94,9 +95,13 @@ class ApplicationWindow(QMainWindow):
     def found_barcode(self, code):
         # If we are not paying then we are just scanning for a normal item
         if not self.paying:
+            print('flag1')
             code = code[1:]
+            print(code)
             self.cart.add_item(code)
+            print('flag2')
             self.update_items()
+            print('flag3')
         # If we are paying then we assume the barcode is a payment thing
         else:
             user = None
@@ -107,15 +112,20 @@ class ApplicationWindow(QMainWindow):
             if user is None:
                 print("User wasn't found...")
                 return
-            self.cart.store_transaction(self.cart.cart.id, user)
+            self.cart.store_transaction(user)
             print("Transaction succeeded")
             self.mainClick()
+            self.paying = False
+            # reset the cart after payment
+            self.cart.clear()
 
     def update_items(self):
+        self.ui.listWidget.clear()
         priceTotal = 0
-        for i in range(len(self.cart.get_items())):
-            priceTotal += self.cart.get_items()[i]['price']
-            cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
+        shopping_cart = self.cart.get_items()
+        for i in range(len(shopping_cart)):
+            priceTotal += shopping_cart[i]['price'] * shopping_cart[i]['qty']
+            cartItem = QListWidgetItem(shopping_cart[i]['name'] + " " + str(shopping_cart[i]['qty']) + " * " + str(shopping_cart[i]['price']))
             self.ui.listWidget.addItem(cartItem)
         cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
         self.ui.listWidget.addItem(cartItem)
@@ -165,7 +175,7 @@ class ApplicationWindow(QMainWindow):
         layout_index = 3
         self.StackedLayout.setCurrentIndex(3)
         # Then process the cart for a transaction
-        paying = True
+        self.paying = True
 
     def mainClick(self):
         layout_index = 0

@@ -138,6 +138,16 @@ class Client():
         # if the item was not found in the list at all, return an error
         return False
 
+    def clear(self):
+        """
+        Clears the contents of the items in the cart
+        @return: a boolean flag representing whether the operation succeeded or not
+        """
+        field_updates = {
+            "items" : []
+        }
+        self.cart.update(field_updates)
+
     def get_items(self):
         """
         Returns a list of all the items in the cart referenced by the document
@@ -177,26 +187,23 @@ class Client():
         return None
 
 
-    def store_transaction(self, cart_id, user_id):
+    def store_transaction(self, user_id, payment_type=1, auth_code='TEST AUTH CODE'):
         """
         Processes and records a transaction from a carts' items
-        @param carts: A Collection object representing the carts
-        @param transactions: A Collection object representing the transactions
-        @param inventory: A Colelction object representing the item inventory
-        @param cart_id: The desired cart id to process the transaction with
         @param user_id: The id of the user that is making the transaction
         @return: A Boolean representing whether the transaction succeeded or not
         """
         item_array = None
         # First find the item array from the desired cart
         for document in self.carts.get():
-            if document.id == cart_id:
+            if document.id == self.cart.id:
                 cart_data = document.to_dict()
-                item_array = cart_data['items']
+                if 'items' in cart_data:
+                    item_array = cart_data['items']
         if item_array is None:
             return False
         # Then start populating data for the transaction
-        transaction_data = {"user": user_id, "cart": cart_id,
+        transaction_data = {"user": user_id, "cart": self.cart.id,
                             "items": [], "subtotal": 0., "tax": 0., "total": 0.}
         for item in item_array:
             # TODO: handle case where item prace wasn't found
@@ -205,26 +212,25 @@ class Client():
             else:
                 item_data = self.get_item_data(item['id'])
                 transaction_data['subtotal'] += float(
-                    item_data['unit_price']) * item['quantity']
+                    item_data['price']) * item['quantity']
                 # Add tax if the item is taxable
                 if float(item_data['tax']) == 1:
                     transaction_data['tax'] += float(
-                        item_data['unit_price']) * item['quantity'] * 0.13
+                        item_data['price']) * item['quantity'] * 0.13
                 # process the item as a countable item
-                if item_data['format'] == "0":
+                if item_data['type'] == 1:
                     transaction_data['items'].append(
-                        {'id': item['id'], 'name': item_data['name'], 'qty': item['quantity'], 'unit_price': item_data['unit_price']})
+                        {'id': item['id'], 'name': item_data['name'], 'qty': item['quantity'], 'unit_price': item_data['price']})
                 # process the item as a weighted item
-                if item_data['format'] == "1":
+                if item_data['type'] == 2:
                     transaction_data['items'].append(
-                        {'id': item['id'], 'name': item_data['name'], 'weight': item['quantity'], 'unit_price': item_data['unit_price']})
+                        {'id': item['id'], 'name': item_data['name'], 'weight': item['quantity'], 'unit_price': item_data['price']})
         transaction_data['total'] = transaction_data['subtotal'] + \
             transaction_data['tax']
         # Add a timestamp
         transaction_data['timestamp'] = datetime.datetime.utcnow().strftime(
             '%B %d, %Y, %H:%M:%S UTC').lstrip("0").replace(" 0", " ")
         # TODO: find ways to implement this data
-        transaction_data['auth_code'] = 'TEST AUTH CODE'
-        transaction_data['payment_type'] = -1
+        transaction_data['auth_code'] = auth_code
+        transaction_data['payment_type'] = payment_type
         self.transactions.add(transaction_data)
-        print(transaction_data)
