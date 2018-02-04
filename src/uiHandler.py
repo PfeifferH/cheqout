@@ -27,6 +27,11 @@ GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # ------------------------------------------------------------------------
 
+# triggers for button presses
+red_signal = pyqtSignal()
+yellow_signal = pyqtSignal()
+green_signal = pyqtSignal()
+
 class ButtonThread(QThread):
 
     def run(self):
@@ -37,23 +42,22 @@ class ButtonThread(QThread):
         while True:
             if GPIO.input(red) and not pre_red:
                 print("red")
-                self.emit(SIGNAL("red_click()"))
+                red_signal.emit()
                 pre_red = True
             elif not GPIO.input(red):
                 pre_red = False
             if GPIO.input(yellow) and not pre_yellow:
                 print("yellow")
-                self.emit(SIGNAL("yellow_click()"))
+                yellow_signal.emit()
                 pre_yellow = True
             elif not GPIO.input(yellow):
                 pre_yellow = False
             if GPIO.input(green) and not pre_green:
                 print("green")
-                self.emit(SIGNAL("green_click()"))
+                green_signal.emit()
                 pre_green = True
             elif not GPIO.input(green):
                 pre_green = False
-
 
 
 def main():
@@ -155,10 +159,10 @@ class ApplicationWindow(QMainWindow):
         atexit.register(self.all_done)
 
         # setup threading signals to work with buttons
+        red_signal.connect(self.red_click)
+        yellow_signal.connect(self.yellow_click)
+        green_signal.connect(self.green_click)
         thread = ButtonThread()
-        self.connect(thread, SIGNAL("red_click()"), self.red_click)
-        self.connect(thread, SIGNAL("yellow_click()"), self.yellow_click)
-        self.connect(thread, SIGNAL("green_click()"), self.green_click)
         thread.start()
 
 if __name__ == "__main__":
