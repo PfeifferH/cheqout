@@ -13,10 +13,37 @@ from cart_interface_produce import Ui_produceWindow
 
 import atexit
 
+# ------------------------ BUTTON PRESS CONSTANTS -----------------------
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+
+red = 23
+yellow = 24
+green = 25
+
+GPIO.setup(red, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+# ------------------------------------------------------------------------
+
+class ButtonThread(QThread):
+
+    def run(self):
+        while True:
+            if (GPIO.input(red)):
+                print("red")
+            elif (GPIO.input(yellow)):
+                print("yellow")
+            elif (GPIO.input(green)):
+                print("green")
+
 def main():
 
     #initialize application
     app = QApplication(sys.argv)
+    thread = ButtonThread()
+    thread.finished.connect(app.exit)
+    thread.start()
     application = ApplicationWindow()
     application.show()
     app.exec_()
