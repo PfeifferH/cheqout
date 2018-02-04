@@ -26,6 +26,7 @@ class Client():
 
         The function returns None if the request couldn't be fulfulled
         """
+        # login to firestore
         cred = credentials.Certificate(
             key_location)
         firebase_admin.initialize_app(cred)
@@ -37,6 +38,12 @@ class Client():
 
         # assume we can always find the inventory collection
         self.inventory = client.collection('inventory')
+        # assume we can always find the users collection
+        self.users = client.collection('users')
+        # assume we can always find the carts collection
+        self.carts = client.collection('carts')
+        # assume we can always find the transaction collection
+        self.transactions = client.collection('transaction')
 
         collection = client.collection('carts')
         # if cart is not specified, create a new cart
@@ -168,3 +175,56 @@ class Client():
                 return_data['id'] = item_id
                 return return_data
         return None
+
+
+    def store_transaction(self, cart_id, user_id):
+        """
+        Processes and records a transaction from a carts' items
+        @param carts: A Collection object representing the carts
+        @param transactions: A Collection object representing the transactions
+        @param inventory: A Colelction object representing the item inventory
+        @param cart_id: The desired cart id to process the transaction with
+        @param user_id: The id of the user that is making the transaction
+        @return: A Boolean representing whether the transaction succeeded or not
+        """
+        item_array = None
+        # First find the item array from the desired cart
+        for document in self.carts.get():
+            if document.id == cart_id:
+                cart_data = document.to_dict()
+                item_array = cart_data['items']
+        if item_array is None:
+            return False
+        # Then start populating data for the transaction
+        transaction_data = {"user": user_id, "cart": cart_id,
+                            "items": [], "subtotal": 0., "tax": 0., "total": 0.}
+        for item in item_array:
+            # TODO: handle case where item prace wasn't found
+            if self.get_item_data(item['id']) is None:
+                print("PRICE NOT FOUND")
+            else:
+                item_data = self.get_item_data(item['id'])
+                transaction_data['subtotal'] += float(
+                    item_data['unit_price']) * item['quantity']
+                # Add tax if the item is taxable
+                if float(item_data['tax']) == 1:
+                    transaction_data['tax'] += float(
+                        item_data['unit_price']) * item['quantity'] * 0.13
+                # process the item as a countable item
+                if item_data['format'] == "0":
+                    transaction_data['items'].append(
+                        {'id': item['id'], 'name': item_data['name'], 'qty': item['quantity'], 'unit_price': item_data['unit_price']})
+                # process the item as a weighted item
+                if item_data['format'] == "1":
+                    transaction_data['items'].append(
+                        {'id': item['id'], 'name': item_data['name'], 'weight': item['quantity'], 'unit_price': item_data['unit_price']})
+        transaction_data['total'] = transaction_data['subtotal'] + \
+            transaction_data['tax']
+        # Add a timestamp
+        transaction_data['timestamp'] = datetime.datetime.utcnow().strftime(
+            '%B %d, %Y, %H:%M:%S UTC').lstrip("0").replace(" 0", " ")
+        # TODO: find ways to implement this data
+        transaction_data['auth_code'] = 'TEST AUTH CODE'
+        transaction_data['payment_type'] = -1
+        self.transactions.add(transaction_data)
+        print(transaction_data)

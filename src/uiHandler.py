@@ -92,21 +92,33 @@ class ApplicationWindow(QMainWindow):
     green_signal = pyqtSignal()
 
     def found_barcode(self, code):
-        code = code[1:]
-        print(code)
-        self.cart.add_item(code)
-        self.update_items(ui)
+        # If we are not paying then we are just scanning for a normal item
+        if not self.paying:
+            code = code[1:]
+            self.cart.add_item(code)
+            self.update_items()
+        # If we are paying then we assume the barcode is a payment thing
+        else:
+            user = None
+            # So we should handle a transaction here
+            for document in self.cart.users.get():
+                if document.to_dict()['loyalty'] == code:
+                    user = document.reference.id
+            if user is None:
+                print("User wasn't found...")
+                return
+            self.cart.store_transaction(self.cart.cart.id, user)
+            print("Transaction succeeded")
+            self.mainClick()
 
-    def update_items(self, ui):
+    def update_items(self):
         priceTotal = 0
         for i in range(len(self.cart.get_items())):
             priceTotal += self.cart.get_items()[i]['price']
             cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
             ui.listWidget.addItem(cartItem)
-
         cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
-        ui.listWidget.addItem(cartItem)
-
+        self.ui.listWidget.addItem(cartItem)
 
     def red_click(self):
         if layout_index == 0:
@@ -152,6 +164,8 @@ class ApplicationWindow(QMainWindow):
     def payClick(self):
         layout_index = 3
         self.StackedLayout.setCurrentIndex(3)
+        # Then process the cart for a transaction
+        paying = True
 
     def mainClick(self):
         layout_index = 0
@@ -172,8 +186,8 @@ class ApplicationWindow(QMainWindow):
         # Setup the main window
         layout_index = 0
         MainWindow = QMainWindow()
-        ui = Ui_MainWindow()
-        ui.setupUi(MainWindow)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(MainWindow)
         self.StackedLayout.addWidget(MainWindow)
 
 
@@ -197,8 +211,8 @@ class ApplicationWindow(QMainWindow):
         self.setCentralWidget(self.MainWidget)
         self.StackedLayout.setCurrentIndex(0)
 
-        ui.pushButton_2.clicked.connect(self.produceClick)
-        ui.pushButton_3.clicked.connect(self.payClick)
+        self.ui.pushButton_2.clicked.connect(self.produceClick)
+        self.ui.pushButton_3.clicked.connect(self.payClick)
 
         produceUi.pushButton_2.clicked.connect(self.produceEnterClick)
 
@@ -206,9 +220,7 @@ class ApplicationWindow(QMainWindow):
         produceEnterUi.pushButton_3.clicked.connect(self.mainClick)
 
 
-        self.update_items(ui)
-
-
+        self.update_items()
 
         atexit.register(self.all_done)
 
@@ -222,6 +234,8 @@ class ApplicationWindow(QMainWindow):
         self.barcode_thread = ScanThread(self)
         self.barcode_thread.start()
 
+        # initialize member variables
+        self.paying = False
 
 if __name__ == "__main__":
     main()
