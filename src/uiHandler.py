@@ -11,6 +11,7 @@ from cart_interface_scan import Ui_ScanWindow
 from cart_interface_produce import Ui_produceWindow
 from cart_interface_items import Ui_ItemWindow
 
+import atexit
 
 def main():
 
@@ -28,13 +29,16 @@ class ApplicationWindow(QMainWindow):
 
     def produceClick(self):
         self.StackedLayout.setCurrentIndex(2)
-        #add_item(self.cart, "ONIONS")
+        add_item(self.cart, "ONIONS")
 
     def itemsClick(self):
         self.StackedLayout.setCurrentIndex(3)
 
     def mainClick(self):
         self.StackedLayout.setCurrentIndex(0)
+
+    def all_done(self):
+        deactivate(self.cart)
 
     def __init__(self):
         # Set up api
@@ -81,6 +85,8 @@ class ApplicationWindow(QMainWindow):
 
         itemUi.pushButton_2.clicked.connect(self.mainClick)
 
+
+        atexit.register(self.all_done)
 
 if __name__ == "__main__":
     main()
