@@ -129,7 +129,7 @@ class ApplicationWindow(QMainWindow):
     def scanClick(self):
         # newItem = get_barcode(self)
         # add_item(self.cart, newItem)
-        Client.add_item(self.cart, 'Tri-team-members')
+        self.cart.add_item('Tri-team-members')
         layout_index = 1
         self.StackedLayout.setCurrentIndex(1)
 
@@ -146,12 +146,12 @@ class ApplicationWindow(QMainWindow):
         self.StackedLayout.setCurrentIndex(0)
 
     def all_done(self):
-        Client.deactivate(self.cart)
+        self.cart.deactivate()
 
     def __init__(self):
         # Set up api
         self.cart = Client("../keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json", 'ULtXMhOuqcRHPpa2aKy1')
-        Client.activate(self.cart)
+        self.cart.activate()
 
 
         super(ApplicationWindow, self).__init__()
@@ -196,9 +196,9 @@ class ApplicationWindow(QMainWindow):
         produceEnterUi.pushButton_3.clicked.connect(self.mainClick
                                                     )
         priceTotal = 0
-        for i in range(len(Client.get_items(self.cart))):
-            priceTotal+= Client.get_items(self.cart)[i]['price']
-            cartItem = QListWidgetItem(Client.get_items(self.cart)[i]['name'] + " " + str(Client.get_items(self.cart)[i]['price']))
+        for i in range(len(self.cart.get_items())):
+            priceTotal+= self.cart.get_items()[i]['price']
+            cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
             ui.listWidget.addItem(cartItem)
 
         cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
