@@ -96,6 +96,17 @@ class ApplicationWindow(QMainWindow):
         print(code)
         self.cart.add_item(code)
 
+    def update_items(self):
+        priceTotal = 0
+        for i in range(len(self.cart.get_items())):
+            priceTotal += self.cart.get_items()[i]['price']
+            cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
+            ui.listWidget.addItem(cartItem)
+
+        cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
+        ui.listWidget.addItem(cartItem)
+
+
     def red_click(self):
         if layout_index == 0:
             self.produceClick()
@@ -193,15 +204,8 @@ class ApplicationWindow(QMainWindow):
         produceEnterUi.pushButton_2.clicked.connect(self.mainClick)
         produceEnterUi.pushButton_3.clicked.connect(self.mainClick)
 
-        priceTotal = 0
-        for i in range(len(self.cart.get_items())):
-            priceTotal+= self.cart.get_items()[i]['price']
-            cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
-            ui.listWidget.addItem(cartItem)
 
-        cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
-        ui.listWidget.addItem(cartItem)
-
+        update_items()
 
 
 
