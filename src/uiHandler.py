@@ -1,11 +1,12 @@
 import os
 import sys
+import time
 sys.path.append('../cheqout/src')
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from client import Client
-from barcode_detect import get_barcode
+import barcode_detect
 #from barcode_detect import *
 
 from cart_interface import Ui_MainWindow
@@ -69,8 +70,9 @@ class ScanThread(QThread):
 
     def run(self):
         while True:
-            code = get_barcode()
-            self.mainWindow.barcode_signal.emit()
+            print('FLAG1')
+            code = barcode_detect.get_barcode(False)
+            print('FLAG2')
 
 def main():
 
@@ -85,13 +87,13 @@ class ApplicationWindow(QMainWindow):
 
 
     # triggers for button presses
-    barcode_signal = pyqtSignal()
+    barcode_signal = pyqtSignal(int)
     red_signal = pyqtSignal()
     yellow_signal = pyqtSignal()
     green_signal = pyqtSignal()
 
-    def found_barcode(self):
-        print("code")
+    def found_barcode(self, code):
+        print(code)
 
     def red_click(self):
         if layout_index == 0:
