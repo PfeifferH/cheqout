@@ -95,9 +95,13 @@ class ApplicationWindow(QMainWindow):
     def found_barcode(self, code):
         # If we are not paying then we are just scanning for a normal item
         if not self.paying:
+            print('flag1')
             code = code[1:]
+            print(code)
             self.cart.add_item(code)
+            print('flag2')
             self.update_items()
+            print('flag3')
         # If we are paying then we assume the barcode is a payment thing
         else:
             user = None
@@ -117,7 +121,9 @@ class ApplicationWindow(QMainWindow):
         for i in range(len(self.cart.get_items())):
             priceTotal += self.cart.get_items()[i]['price']
             cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
+            print('a')
             self.ui.listWidget.addItem(cartItem)
+            print('b')
         cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
         self.ui.listWidget.addItem(cartItem)
 
