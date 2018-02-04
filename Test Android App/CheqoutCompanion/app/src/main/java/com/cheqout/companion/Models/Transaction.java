@@ -1,4 +1,4 @@
-package com.cheqout.companion;
+package com.cheqout.companion.Models;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 

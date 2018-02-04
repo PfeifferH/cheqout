@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
-
+            android:id="@+id/rlCardType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -20,7 +20,7 @@
             android:background="@color/colorAccent">
 
             <TextView
-                android:id="@+id/tvCardCost"
+                android:id="@+id/tvCardType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2dp"

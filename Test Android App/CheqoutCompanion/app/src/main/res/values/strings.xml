@@ -2,4 +2,10 @@
     <string name="app_name">Cheqout Companion</string>
     <string name="activity_verify">Verify Cart</string>
     <string name="activity_loyalty">Cheqout Now</string>
+    <string name="fingerprint">Identity Verification</string>
+    <string name="fingerinstructions">Scan your fingerprint to unlock your payment barcode.</string>
+    <string name="activity_cardlist">Saved Credit Cards</string>
+    <string name="activity_addcard">Add a Credit Card</string>
+    <string name="activity_editprofile">Edit Profile</string>
+
 </resources>

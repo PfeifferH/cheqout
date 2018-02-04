@@ -1,4 +1,4 @@
-package com.cheqout.companion;
+package com.cheqout.companion.Models;
 
 import java.util.Map;
 
