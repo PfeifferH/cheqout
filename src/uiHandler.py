@@ -98,7 +98,7 @@ class ApplicationWindow(QMainWindow):
 
     def red_click(self):
         if layout_index == 0:
-            self.scanClick()
+            self.produceClick()
         elif layout_index == 1:
             pass
         elif layout_index == 2:
