@@ -28,6 +28,9 @@
       <pointsize>16</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: green;</string>
+    </property>
     <property name="text">
      <string>PRODUCE</string>
     </property>
@@ -45,6 +48,9 @@
      <font>
       <pointsize>16</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: yellow;</string>
     </property>
     <property name="text">
      <string>PAY</string>
