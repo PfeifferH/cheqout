@@ -13,7 +13,7 @@ def get_barcode(display=True):
         display = sys.argv[-1] == 'display'
 
     # Configuration options
-    RESOLUTION = (300, 160)
+    RESOLUTION = (800, 480)
 
     # Initialise Raspberry Pi camera
     camera = PiCamera()
