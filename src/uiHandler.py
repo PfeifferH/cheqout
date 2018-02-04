@@ -70,9 +70,8 @@ class ScanThread(QThread):
 
     def run(self):
         while True:
-            print('FLAG1')
             code = barcode_detect.get_barcode(False)
-            print('FLAG2')
+            self.mainWindow.barcode_signal.emit(int(code))
 
 def main():
 
