@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from client import Client
+from barcode_detect import get_barcode
 #from barcode_detect import *
 
 from cart_interface import Ui_MainWindow
@@ -58,6 +59,16 @@ class ButtonThread(QThread):
             elif not GPIO.input(green):
                 pre_green = False
 
+class ScanThread(QThread):
+
+    def __init__(self, app):
+        super().__init__()
+        self.mainWindow = app
+
+    def run(self):
+        while True:
+            code = get_barcode()
+            self.mainWindow.barcode_signal.emit(code)
 
 def main():
 
@@ -72,9 +83,13 @@ class ApplicationWindow(QMainWindow):
 
 
     # triggers for button presses
+    barcode_signal = pyqtSignal()
     red_signal = pyqtSignal()
     yellow_signal = pyqtSignal()
     green_signal = pyqtSignal()
+
+    def found_barcode(self, code):
+        print(code)
 
     def red_click(self):
         self.scanClick()
@@ -168,8 +183,11 @@ class ApplicationWindow(QMainWindow):
         self.red_signal.connect(self.red_click)
         self.yellow_signal.connect(self.yellow_click)
         self.green_signal.connect(self.green_click)
-        self.thread = ButtonThread(self)
-        self.thread.start()
+        self.barcode_signal.connect(self.found_barcode)
+        self.button_thread = ButtonThread(self)
+        self.button_thread.start()
+        self.barcode_thread = ScanThread(self)
+        self.barcode_thread.start()
 
 if __name__ == "__main__":
     main()
