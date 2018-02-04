@@ -72,6 +72,7 @@ class ScanThread(QThread):
         while True:
             code = barcode_detect.get_barcode(False)
             self.mainWindow.barcode_signal.emit(code.decode("utf-8"))
+            time.sleep(1)
 
 def main():
 
