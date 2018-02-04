@@ -95,9 +95,9 @@ class ApplicationWindow(QMainWindow):
         code = code[1:]
         print(code)
         self.cart.add_item(code)
-        self.update_items()
+        self.update_items(ui)
 
-    def update_items(self):
+    def update_items(self, ui):
         priceTotal = 0
         for i in range(len(self.cart.get_items())):
             priceTotal += self.cart.get_items()[i]['price']
@@ -206,7 +206,7 @@ class ApplicationWindow(QMainWindow):
         produceEnterUi.pushButton_3.clicked.connect(self.mainClick)
 
 
-        self.update_items()
+        self.update_items(ui)
 
 
 
@@ -221,6 +221,7 @@ class ApplicationWindow(QMainWindow):
         self.button_thread.start()
         self.barcode_thread = ScanThread(self)
         self.barcode_thread.start()
+
 
 if __name__ == "__main__":
     main()
