@@ -96,6 +96,7 @@ class ApplicationWindow(QMainWindow):
         if not self.paying:
             code = code[1:]
             self.cart.add_item(code)
+            self.update_items()
         # If we are paying then we assume the barcode is a payment thing
         else:
             user = None
@@ -109,18 +110,25 @@ class ApplicationWindow(QMainWindow):
             self.cart.store_transaction(self.cart.cart.id, user)
             print("Transaction succeeded")
             self.mainClick()
-            
+
+    def update_items(self):
+        priceTotal = 0
+        for i in range(len(self.cart.get_items())):
+            priceTotal += self.cart.get_items()[i]['price']
+            cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
+            ui.listWidget.addItem(cartItem)
+        cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
+        ui.listWidget.addItem(cartItem)
 
     def red_click(self):
         if layout_index == 0:
-            pass
+            self.produceClick()
         elif layout_index == 1:
             pass
         elif layout_index == 2:
             pass
         else:
             pass
-        self.scanClick()
 
     def yellow_click(self):
         if layout_index == 0:
@@ -211,15 +219,14 @@ class ApplicationWindow(QMainWindow):
         produceEnterUi.pushButton_2.clicked.connect(self.mainClick)
         produceEnterUi.pushButton_3.clicked.connect(self.mainClick)
 
-        priceTotal = 0
-        for i in range(len(self.cart.get_items())):
-            priceTotal+= self.cart.get_items()[i]['price']
-            cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
-            ui.listWidget.addItem(cartItem)
 
-        cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
-        ui.listWidget.addItem(cartItem)
+<<<<<<< HEAD
+=======
+        self.update_items()
 
+
+
+>>>>>>> 1ecc05640b60c23970925a66182b77be2582f8cb
         atexit.register(self.all_done)
 
         # setup threading signals to work with buttons
