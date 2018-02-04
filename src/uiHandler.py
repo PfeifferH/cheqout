@@ -78,7 +78,7 @@ def main():
     #initialize application
     app = QApplication(sys.argv)
     application = ApplicationWindow()
-    application.show()
+    application.showFullScreen()
     app.exec_()
 
 
