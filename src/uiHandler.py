@@ -7,12 +7,12 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from client import Client
 import barcode_detect
-#from barcode_detect import *
+from barcode_detect import *
 
 from cart_interface import Ui_MainWindow
-from cart_interface_scan import Ui_ScanWindow
 from cart_interface_produce import Ui_produceWindow
 from cart_interface_produce_enter import Ui_ProdEnterWindow
+from payment_barcode_interface import Ui_PayWindow
 
 import atexit
 
@@ -129,18 +129,16 @@ class ApplicationWindow(QMainWindow):
             pass
         self.produceEnterClick()
 
-    def scanClick(self):
-        # newItem = get_barcode(self)
-        # add_item(self.cart, newItem)
-        self.cart.add_item('Tri-team-members')
+
+    def produceClick(self):
         layout_index = 1
         self.StackedLayout.setCurrentIndex(1)
 
-    def produceClick(self):
+    def produceEnterClick(self):
         layout_index = 2
         self.StackedLayout.setCurrentIndex(2)
 
-    def produceEnterClick(self):
+    def payClick(self):
         layout_index = 3
         self.StackedLayout.setCurrentIndex(3)
 
@@ -166,10 +164,7 @@ class ApplicationWindow(QMainWindow):
         ui = Ui_MainWindow()
         ui.setupUi(MainWindow)
         self.StackedLayout.addWidget(MainWindow)
-        # Setup the second window
-        scans = QDialog()
-        scansUi = Ui_ScanWindow()
-        scansUi.setupUi(scans)
+
 
         produce = QDialog()
         produceUi = Ui_produceWindow()
@@ -179,25 +174,26 @@ class ApplicationWindow(QMainWindow):
         produceEnterUi = Ui_ProdEnterWindow()
         produceEnterUi.setupUi(produceEnter)
 
-        self.StackedLayout.addWidget(scans)
+        payEnter = QMainWindow()
+        payEnterUi = Ui_PayWindow()
+        payEnterUi.setupUi(payEnter)
+
         self.StackedLayout.addWidget(produce)
         self.StackedLayout.addWidget(produceEnter)
+        self.StackedLayout.addWidget(payEnter)
         self.MainWidget = QWidget()
         self.MainWidget.setLayout(self.StackedLayout)
         self.setCentralWidget(self.MainWidget)
         self.StackedLayout.setCurrentIndex(0)
 
-        ui.pushButton.clicked.connect(self.scanClick)
         ui.pushButton_2.clicked.connect(self.produceClick)
-        #ui.pushButton_3.clicked.connect(self.itemsClick)
-
-        scansUi.pushButton_2.clicked.connect(self.mainClick)
+        ui.pushButton_3.clicked.connect(self.payClick)
 
         produceUi.pushButton_2.clicked.connect(self.produceEnterClick)
 
         produceEnterUi.pushButton_2.clicked.connect(self.mainClick)
-        produceEnterUi.pushButton_3.clicked.connect(self.mainClick
-                                                    )
+        produceEnterUi.pushButton_3.clicked.connect(self.mainClick)
+
         priceTotal = 0
         for i in range(len(self.cart.get_items())):
             priceTotal+= self.cart.get_items()[i]['price']
