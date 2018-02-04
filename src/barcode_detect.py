@@ -6,15 +6,14 @@ import cv2
 import zbar
 from PIL import Image
 
-def get_barcode(display=False):
+def get_barcode(display=True):
 
     # Debug mode
-    display = False
     if len(sys.argv) > 1:
         display = sys.argv[-1] == 'display'
 
     # Configuration options
-    RESOLUTION = (300, 160)
+    RESOLUTION = (800, 480)
 
     # Initialise Raspberry Pi camera
     camera = PiCamera()
@@ -32,6 +31,7 @@ def get_barcode(display=False):
     # Initialise OpenCV window
     if display:
         cv2.namedWindow("#cheqout")
+        cv2.moveWindow("#chequout", 400, 160)
 
     #print ("OpenCV version: %s" % (cv2.__version__))
     #print ("Press q to exit ...")
@@ -63,7 +63,7 @@ def get_barcode(display=False):
             elif third is None:
                 third = codes
         
-        cv2.imshow("#cheqout", output)
+        # cv2.imshow("#cheqout", output)
 
         # clear stream for next frame
         rawCapture.truncate(0)

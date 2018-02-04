@@ -1,10 +1,12 @@
 import os
 import sys
+import time
 sys.path.append('../cheqout/src')
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from client import Client
+import barcode_detect
 #from barcode_detect import *
 
 from cart_interface import Ui_MainWindow
@@ -26,6 +28,8 @@ GPIO.setup(red, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(yellow, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(green, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # ------------------------------------------------------------------------
+
+layout_index = 0
 
 class ButtonThread(QThread):
 
@@ -58,6 +62,16 @@ class ButtonThread(QThread):
             elif not GPIO.input(green):
                 pre_green = False
 
+class ScanThread(QThread):
+
+    def __init__(self, app):
+        super().__init__()
+        self.mainWindow = app
+
+    def run(self):
+        while True:
+            code = barcode_detect.get_barcode(False)
+            self.mainWindow.barcode_signal.emit(code.decode("utf-8"))
 
 def main():
 
@@ -72,48 +86,80 @@ class ApplicationWindow(QMainWindow):
 
 
     # triggers for button presses
+    barcode_signal = pyqtSignal(str)
     red_signal = pyqtSignal()
     yellow_signal = pyqtSignal()
     green_signal = pyqtSignal()
 
+    def found_barcode(self, code):
+        print(code)
+
     def red_click(self):
+        if layout_index == 0:
+            pass
+        elif layout_index == 1:
+            pass
+        elif layout_index == 2:
+            pass
+        else:
+            pass
         self.scanClick()
 
     def yellow_click(self):
+        if layout_index == 0:
+            pass
+        elif layout_index == 1:
+            pass
+        elif layout_index == 2:
+            pass
+        else:
+            pass
         self.produceClick()
 
     def green_click(self):
+        if layout_index == 0:
+            pass
+        elif layout_index == 1:
+            pass
+        elif layout_index == 2:
+            pass
+        else:
+            pass
         self.produceEnterClick()
 
     def scanClick(self):
         # newItem = get_barcode(self)
         # add_item(self.cart, newItem)
-        Client.add_item(self.cart, 'Tri-team-members')
+        self.cart.add_item('Tri-team-members')
+        layout_index = 1
         self.StackedLayout.setCurrentIndex(1)
 
     def produceClick(self):
+        layout_index = 2
         self.StackedLayout.setCurrentIndex(2)
 
     def produceEnterClick(self):
+        layout_index = 3
         self.StackedLayout.setCurrentIndex(3)
 
-
     def mainClick(self):
+        layout_index = 0
         self.StackedLayout.setCurrentIndex(0)
 
     def all_done(self):
-        Client.deactivate(self.cart)
+        self.cart.deactivate()
 
     def __init__(self):
         # Set up api
         self.cart = Client("../keys/cheqout-57ee7-firebase-adminsdk-8b1oa-8dd14d0e11.json", 'ULtXMhOuqcRHPpa2aKy1')
-        Client.activate(self.cart)
+        self.cart.activate()
 
 
         super(ApplicationWindow, self).__init__()
         self.resize(800, 480)
         self.StackedLayout = QStackedLayout()
         # Setup the main window
+        layout_index = 0
         MainWindow = QMainWindow()
         ui = Ui_MainWindow()
         ui.setupUi(MainWindow)
@@ -151,9 +197,9 @@ class ApplicationWindow(QMainWindow):
         produceEnterUi.pushButton_3.clicked.connect(self.mainClick
                                                     )
         priceTotal = 0
-        for i in range(len(Client.get_items(self.cart))):
-            priceTotal+= Client.get_items(self.cart)[i]['price']
-            cartItem = QListWidgetItem(Client.get_items(self.cart)[i]['name'] + " " + str(Client.get_items(self.cart)[i]['price']))
+        for i in range(len(self.cart.get_items())):
+            priceTotal+= self.cart.get_items()[i]['price']
+            cartItem = QListWidgetItem(self.cart.get_items()[i]['name'] + " " + str(self.cart.get_items()[i]['price']))
             ui.listWidget.addItem(cartItem)
 
         cartItem = QListWidgetItem("TOTAL PRICE: " + str(priceTotal))
@@ -168,8 +214,11 @@ class ApplicationWindow(QMainWindow):
         self.red_signal.connect(self.red_click)
         self.yellow_signal.connect(self.yellow_click)
         self.green_signal.connect(self.green_click)
-        self.thread = ButtonThread(self)
-        self.thread.start()
+        self.barcode_signal.connect(self.found_barcode)
+        self.button_thread = ButtonThread(self)
+        self.button_thread.start()
+        self.barcode_thread = ScanThread(self)
+        self.barcode_thread.start()
 
 if __name__ == "__main__":
     main()

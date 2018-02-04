@@ -89,6 +89,8 @@ class Client():
         @return: a boolean flag representing whether the operation succeeded or not
         """
         snapshot = self.cart.get().to_dict()
+        if 'items' not in snapshot:
+            snapshot['items'] = []
         item_array = snapshot['items']
         item_found = False
         # if the item already exists in the item list, just add 1 to the quantity
@@ -110,6 +112,8 @@ class Client():
         @return: a boolean flag representing whether the operation succeeded or not
         """
         snapshot = self.cart.get().to_dict()
+        if 'items' not in snapshot:
+            snapshot['items'] = []
         item_array = snapshot['items']
         # if the item already exists in the item list, just add 1 to the quantity
         for item in item_array:
@@ -134,7 +138,10 @@ class Client():
         @return: A list of objects that represent the items in the cart
         """
         item_list = []
-        item_snapshot = self.cart.get().to_dict()['items']
+        snapshot = self.cart.get().to_dict()
+        if 'items' not in snapshot:
+            return []
+        item_snapshot = snapshot['items']
         for item in item_snapshot:
             for document in self.inventory.get():
                 if document.id == item['id']:
