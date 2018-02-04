@@ -153,3 +153,18 @@ class Client():
                     item_data['type'] = inv_item_dict['type']
                     item_list.append(item_data)
         return item_list
+
+    def get_item_data(self, item_id):
+        """
+        Get the data associated with an item from an inventory
+        @param item_id: The id of the item data being requested from
+        @return: a dict containing data about the requested item 
+
+        returns none if the item was not found       
+        """
+        for document in self.inventory.get():
+            if document.id == item_id:
+                return_data = document.to_dict()
+                return_data['id'] = item_id
+                return return_data
+        return None
