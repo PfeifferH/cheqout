@@ -192,7 +192,8 @@ class Client():
         for document in self.carts.get():
             if document.id == cart_id:
                 cart_data = document.to_dict()
-                item_array = cart_data['items']
+                if 'items' in cart_data:
+                    item_array = cart_data['items']
         if item_array is None:
             return False
         # Then start populating data for the transaction
@@ -205,17 +206,17 @@ class Client():
             else:
                 item_data = self.get_item_data(item['id'])
                 transaction_data['subtotal'] += float(
-                    item_data['unit_price']) * item['quantity']
+                    item_data['price']) * item['quantity']
                 # Add tax if the item is taxable
                 if float(item_data['tax']) == 1:
                     transaction_data['tax'] += float(
-                        item_data['unit_price']) * item['quantity'] * 0.13
+                        item_data['price']) * item['quantity'] * 0.13
                 # process the item as a countable item
-                if item_data['format'] == "0":
+                if item_data['type'] == "1":
                     transaction_data['items'].append(
                         {'id': item['id'], 'name': item_data['name'], 'qty': item['quantity'], 'unit_price': item_data['unit_price']})
                 # process the item as a weighted item
-                if item_data['format'] == "1":
+                if item_data['type'] == "2":
                     transaction_data['items'].append(
                         {'id': item['id'], 'name': item_data['name'], 'weight': item['quantity'], 'unit_price': item_data['unit_price']})
         transaction_data['total'] = transaction_data['subtotal'] + \
