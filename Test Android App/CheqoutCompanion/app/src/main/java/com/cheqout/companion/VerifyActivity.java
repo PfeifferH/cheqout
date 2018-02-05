@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.cheqout.companion.Models.Item;
 import com.cheqout.companion.Models.ReceiptCard;
@@ -13,7 +14,9 @@ import com.cheqout.companion.Models.Transaction;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -56,6 +59,7 @@ public class VerifyActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Receipts");
             db.collection("transaction")
                     .whereEqualTo("user", userkey)
+                    //.orderBy("timestamp")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -82,7 +86,7 @@ public class VerifyActivity extends AppCompatActivity {
 
     public void updateUI() {
         if (myTrans != null && myTrans.size() != 0) {
-            if (myTrans.size() >= 3) setTransaction(tcOne, myTrans.get(0));
+            if (myTrans.size() >= 3) setTransaction(tcThree, myTrans.get(2));
             if (myTrans.size() >= 2) setTransaction(tcTwo, myTrans.get(1));
             if (myTrans.size() >= 1) setTransaction(tcOne, myTrans.get(0));
         }
@@ -102,6 +106,7 @@ public class VerifyActivity extends AppCompatActivity {
                 } else {
                     receipt = receipt + myItem.getName() + "    $" + String.format("%.02f", myItem.getUnit_price()) + "*0    $0.00\n";
                 }
+                Log.e("AHHH", receipt);
             }
             receipt = receipt + "************\n\nSubtotal: $" + String.format("%.02f", trans.getSubtotal()) + "\nTax: $" + String.format("%.02f", trans.getTax()) + "\nTotal: $" + String.format("%.02f", trans.getTotal());
 
@@ -143,7 +148,55 @@ public class VerifyActivity extends AppCompatActivity {
             Log.e("AHHH", "1");
             if (scanResult.getContents() != null) {
                 Log.e("AHHH", "2");
-                db.collection("carts").document(scanResult.getContents())
+                db.collection("carts").document(scanResult.getContents()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(DocumentSnapshot cart, FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        if (cart != null && cart.exists()) {
+                            if (cart.getString("state") != null && cart.getString("state").equals("active")) {
+                                Log.e("AHHH", "5");
+                                final List<HashMap<String, Object>> items = (List) cart.get("items");
+                                numUnpaid = items.size();
+                                numUnpaidResolved = 0;
+                                unpaid = "";
+                                for (HashMap<String, Object> item : items) {
+                                    final HashMap<String, Object> myItem = item;
+                                    db.collection("inventory").document(item.get("id").toString()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            final DocumentSnapshot results = task.getResult();
+                                            if (results.exists()) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        addToUnpaid((results.getLong("type")), results.getString("name"), Double.parseDouble(myItem.get("quantity").toString()));
+                                                    }
+                                                });
+                                            } else {
+                                                numUnpaid--;
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        checkUnpaidComplete();
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }else{
+                            Toast.makeText(VerifyActivity.this, "Not a valid shopping cart, try again.", Toast.LENGTH_SHORT).show();
+                            IntentIntegrator integrator = new IntentIntegrator(VerifyActivity.this);
+                            integrator.initiateScan();
+                        }
+                    }
+                });
+                /*db.collection("carts").document(scanResult.getContents())
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
@@ -152,44 +205,51 @@ public class VerifyActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Log.e("AHHH", "4");
                                     final DocumentSnapshot cart = task.getResult();
-                                    if (cart.getString("state") != null && cart.getString("state").equals("active")) {
-                                        Log.e("AHHH", "5");
-                                        final List<HashMap<String, Object>> items = (List) cart.get("items");
-                                        numUnpaid = items.size();
-                                        numUnpaidResolved = 0;
-                                        unpaid = "";
-                                        for (HashMap<String, Object> item : items) {
-                                            final HashMap<String, Object> myItem = item;
-                                            db.collection("inventory").document(item.get("id").toString()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    final DocumentSnapshot results = task.getResult();
-                                                    if (results.exists()) {
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                addToUnpaid((results.getLong("type")), results.getString("name"), Double.parseDouble(myItem.get("quantity").toString()));
-                                                            }
-                                                        });
-                                                    } else {
-                                                        numUnpaid--;
-                                                        runOnUiThread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                checkUnpaidComplete();
-                                                            }
-                                                        });
+                                    if (cart.exists()) {
+                                        if (cart.getString("state") != null && cart.getString("state").equals("active")) {
+                                            Log.e("AHHH", "5");
+                                            final List<HashMap<String, Object>> items = (List) cart.get("items");
+                                            numUnpaid = items.size();
+                                            numUnpaidResolved = 0;
+                                            unpaid = "";
+                                            for (HashMap<String, Object> item : items) {
+                                                final HashMap<String, Object> myItem = item;
+                                                db.collection("inventory").document(item.get("id").toString()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        final DocumentSnapshot results = task.getResult();
+                                                        if (results.exists()) {
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    addToUnpaid((results.getLong("type")), results.getString("name"), Double.parseDouble(myItem.get("quantity").toString()));
+                                                                }
+                                                            });
+                                                        } else {
+                                                            numUnpaid--;
+                                                            runOnUiThread(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    checkUnpaidComplete();
+                                                                }
+                                                            });
+                                                        }
                                                     }
-                                                }
-                                            });
+                                                });
+                                            }
                                         }
+                                    }else{
+                                        Toast.makeText(VerifyActivity.this, "Not a valid shopping cart, try again.", Toast.LENGTH_SHORT).show();
+                                        IntentIntegrator integrator = new IntentIntegrator(VerifyActivity.this);
+                                        integrator.initiateScan();
                                     }
 
                                 }
                             }
-                        });
+                        });*/
                 Log.e("AHHH", "7");
                 db.collection("transaction")
+                        //.orderBy("timestamp")
                         .whereEqualTo("cart", scanResult.getContents())
                         .limit(3)
                         .get()
