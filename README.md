@@ -22,10 +22,12 @@ This solution trusts that most users will not steal products, however, a scale i
 This solution allows for the sale of weighed and barcoded items while still decreasing checkout line congestion. It is scalable to meet the requirements of each individual store and does not require the hiring of many additional personnel.
 ### Challenges
 *  Time: This project is being built for QHacks, a 36-hour hackathon
-*  Technical: The scale and touch screen remain uncooperative, prompting temporary fixes for the purpose of demonstration
+*  Technical: The scale and touch screen remain uncooperative, prompting temporary fixes for the purpose of the dem
 
 ### Possible Future Features/Value-Added Features
-*  Information about traffic within the store
+*  **Information about traffic within the store**
 By implementing indoor location tracking, analysts can visualize where customers frequent and tailor/adjust product placement accordingly
-*  Information about product selection
+*  **Information about product selection**
 The system can record a customer’s decision making process and uncertainties based on how long they spend in one spot and if they add, remove or swap items from their cart
+*  **Additional advertisement opportunities**
+Current offers can be shown to the customer when they first take the cart or while they are shopping. This can be done through a offers button on the UI or automatically by integrating indoor location tracking.
